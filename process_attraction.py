@@ -50,7 +50,7 @@ for attraction in data:
     mycursor.close()
     if myresult==None:
         mycursor=mydb.cursor()
-        mycursor.execute('INSERT INTO attractions(id, name, category, description, address, transport, mrt, coordinate, images) VALUES (%s, %s, %s, %s, %s, %s, %s, ST_POINTFROMTEXT(%s), %s)', (attraction['_id'], attraction['name'], attraction['CAT'], attraction['description'], attraction['address'], attraction['direction'], attraction['MRT'], f'POINT({attraction['latitude']} {attraction['longitude']})', ' '.join(process_images(attraction['file']))))
+        mycursor.execute('INSERT INTO attractions(id, name, category, description, address, transport, mrt, coordinate, images) VALUES (%s, %s, %s, %s, %s, %s, %s, ST_POINTFROMTEXT(%s), %s)', (attraction['_id'], attraction['name'], attraction['CAT'], attraction['description'], attraction['address'], attraction['direction'], attraction['MRT'] if attraction['MRT']!=None else "無", f'POINT({attraction['latitude']} {attraction['longitude']})', ' '.join(process_images(attraction['file']))))
         mydb.commit()
     else:
         continue
