@@ -101,20 +101,11 @@ async def get_mrts():
 	try:
 		mydb=mydbpool.get_connection()
 		mycursor=mydb.cursor()
-		mycursor.execute('SELECT mrt FROM attractions;')
+		mycursor.execute(' SELECT DISTINCT mrt FROM attractions GROUP BY mrt ORDER BY count(mrt) DESC;')
 		myresult=mycursor.fetchall()
 		mycursor.close()
 		mydb.close()
-		mrtAll=[]
-		for result in myresult:
-			if result[0]==None:
-				continue
-			mrtAll.append(result[0])
-		mrtCount=Counter(mrtAll)
-		mrtSortedDict=dict(sorted(mrtCount.items(), key=lambda x:x[1], reverse=True))
-		mrtSortedList=[]
-		for key in mrtSortedDict:
-			mrtSortedList.append(key)
-		return {'data': mrtSortedList}
+		data=[mrt[0] for mrt in myresult]
+		return {'data': data}
 	except:
 		return JSONResponse(status_code=500, content={"error": True, "message": "發生內部錯誤，無法取得資料"})
