@@ -55,25 +55,25 @@ async def thankyou(request: Request):
 @app.get("/api/attractions", responses={500: {'model': Error}})
 async def get_attraction(page: int, keyword: str | None=None):
 	try:
+		per_page=12
 		mydb=mydbpool.get_connection()
 		mycursor=mydb.cursor(dictionary=True)
 		if keyword==None:
-			mycursor.execute('SELECT id, name, category, description, address, transport, mrt, ST_X(coordinate) AS lat, ST_Y(coordinate) AS lng, images FROM attractions;')
+			mycursor.execute('SELECT id, name, category, description, address, transport, mrt, ST_X(coordinate) AS lat, ST_Y(coordinate) AS lng, images FROM attractions LIMIT 13 OFFSET %s;', (page*per_page, ))
 			myresult=mycursor.fetchall()
 			mycursor.close()
 			mydb.close()
 		else:
-			mycursor.execute("SELECT id, name, category, description, address, transport, mrt, ST_X(coordinate) AS lat, ST_Y(coordinate) AS lng, images FROM attractions WHERE name LIKE %s or mrt LIKE %s;", ('%'+ keyword + '%', '%'+ keyword + '%'))
+			mycursor.execute("SELECT id, name, category, description, address, transport, mrt, ST_X(coordinate) AS lat, ST_Y(coordinate) AS lng, images FROM attractions WHERE name LIKE %s or mrt LIKE %s LIMIT 13 OFFSET %s;", ('%'+ keyword + '%', '%'+ keyword + '%', page*per_page))
 			myresult=mycursor.fetchall()
 			mycursor.close()
 			mydb.close()
-		for result in myresult:
-			result['images']=result['images'].split(' ')
-		data=myresult[page*12:page*12+12]
-		if len(myresult)<page*12+13:
-			next_page=None
-		else:
+		if len(myresult)>per_page:
+			data=myresult[:per_page]
 			next_page=page+1
+		else:
+			data=myresult
+			next_page=None
 		return {"nextPage": next_page, "data": data}
 	except:
 		return JSONResponse(status_code=500, content={"error": True, "message": "發生內部錯誤，無法取得資料"})
