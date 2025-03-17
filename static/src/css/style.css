@@ -56,6 +56,7 @@ button {
   font-weight: 500;
   color: #666666;
   padding: 10px;
+  cursor: pointer;
 }
 
 .hero__slogan {
@@ -67,25 +68,108 @@ button {
   margin-bottom: 25px;
 }
 
+.search {
+  display: flex;
+  height: 46px;
+  max-width: 460px;
+}
 .search__input {
   border-radius: 5px 0 0 5px;
-  float: left;
-  height: 46px;
-  width: 400px;
+  height: inherit;
+  flex-grow: 1;
   border: none;
   font-size: 16px;
   font-weight: bold;
-  color: #757575;
+  color: #000000;
   padding-left: 10px;
+}
+.search__input::placeholder {
+  color: #757575;
 }
 .search__submit {
   border-radius: 0 5px 5px 0;
-  float: left;
   width: 60px;
+  flex-shrink: 0;
   border: none;
-  height: 46px;
+  height: inherit;
   background-color: #448899;
   cursor: pointer;
+}
+
+.mrt__container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+.mrt__list {
+  list-style: none;
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  padding: 13px 10px;
+}
+.mrt__list > li {
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 13.3px;
+  padding: 5px 15px;
+  color: #666666;
+  transition: color 0.2s;
+}
+.mrt__list > li:hover {
+  color: #000000;
+}
+
+.arrow {
+  height: 32px;
+  width: 32px;
+  flex-shrink: 0;
+  transition: background-image 0.2s;
+}
+.arrow--left {
+  margin-left: 15px;
+  background-image: url("../img/arrow-left_default.png");
+}
+.arrow--left:hover {
+  background-image: url("../img/arrow-left_hovered.png");
+}
+.arrow--right {
+  background-image: url("../img/arrow-right_default.png");
+  margin-right: 15px;
+}
+.arrow--right:hover {
+  background-image: url("../img/arrow-right_hovered.png");
+}
+
+.attraction__card {
+  outline: 1px solid #e8e8e8;
+  outline-offset: -1px;
+  border-radius: 5px;
+}
+.attraction__image {
+  display: flex;
+  align-items: flex-end;
+  height: 197px;
+  background-image: url("../img/test_attraction.png");
+  background-size: cover;
+  border-radius: 5px 5px 0 0;
+}
+.attraction__name {
+  height: 40px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  flex-grow: 1;
+  line-height: 13.3px;
+  padding: 10px;
+}
+.attraction__details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 45px;
+  padding: 10px;
+  color: #757575;
 }
 
 .nav {
@@ -119,6 +203,13 @@ button {
 .container {
   max-width: 1200px;
   margin: 40px auto;
+}
+
+.attractions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 30px;
+  padding: 15px;
 }
 
 .footer {

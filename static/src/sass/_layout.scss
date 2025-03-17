@@ -35,6 +35,14 @@
   margin: 40px auto;
 }
 
+// ATTRACTIONS
+.attractions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 30px;
+  padding: 15px;
+}
+
 // FOOTER
 .footer {
   height: 104px;
