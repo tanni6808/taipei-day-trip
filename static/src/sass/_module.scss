@@ -1,0 +1,26 @@
+@use "./absctact" as *;
+
+// NAV
+.nav {
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  &__title {
+    color: $cyan-70;
+  }
+  &__list {
+    list-style: none;
+    display: flex;
+    & > li {
+      line-height: 13.3px;
+      font-weight: 500;
+      color: $gray-70;
+      padding: 10px;
+    }
+  }
+}

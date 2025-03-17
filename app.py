@@ -1,5 +1,6 @@
 from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Annotated, Optional
 import mysql.connector
@@ -109,3 +110,5 @@ async def get_mrts():
 		return {'data': data}
 	except:
 		return JSONResponse(status_code=500, content={"error": True, "message": "發生內部錯誤，無法取得資料"})
+	
+app.mount("/", StaticFiles(directory="static"))

@@ -1,0 +1,33 @@
+@use "./absctact" as *;
+// NAV
+.nav {
+  height: 54px;
+  width: 100%;
+  background-color: $white;
+  position: fixed;
+  top: 0;
+}
+
+// HERO
+.hero {
+  margin-top: 54px;
+  height: 320px;
+  background-image: url("../img/welcome-image.png");
+  background-size: cover;
+}
+
+// CONTAINER
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+// FOOTER
+.footer {
+  height: 104px;
+  background-color: $gray-50;
+  text-align: center;
+  padding: 45px 0;
+  line-height: 13.3px;
+  color: $white;
+}
