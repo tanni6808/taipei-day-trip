@@ -44,14 +44,6 @@ button {
   line-height: 16px;
 }
 
-.nav__container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-}
 .nav__title {
   color: #448899;
 }
@@ -66,12 +58,50 @@ button {
   padding: 10px;
 }
 
+.hero__slogan {
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+.hero__slogan--sub {
+  color: #ffffff;
+  margin-bottom: 25px;
+}
+
+.search__input {
+  border-radius: 5px 0 0 5px;
+  float: left;
+  height: 46px;
+  width: 400px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #757575;
+  padding-left: 10px;
+}
+.search__submit {
+  border-radius: 0 5px 5px 0;
+  float: left;
+  width: 60px;
+  border: none;
+  height: 46px;
+  background-color: #448899;
+  cursor: pointer;
+}
+
 .nav {
   height: 54px;
   width: 100%;
   background-color: #ffffff;
   position: fixed;
   top: 0;
+  padding: 10px;
+}
+.nav__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .hero {
@@ -79,6 +109,11 @@ button {
   height: 320px;
   background-image: url("../img/welcome-image.png");
   background-size: cover;
+}
+.hero__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 85px 10px;
 }
 
 .container {

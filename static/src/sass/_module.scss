@@ -2,14 +2,6 @@
 
 // NAV
 .nav {
-  &__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-  }
   &__title {
     color: $cyan-70;
   }
@@ -22,5 +14,41 @@
       color: $gray-70;
       padding: 10px;
     }
+  }
+}
+
+// HERO
+.hero {
+  &__slogan {
+    color: $white;
+    margin-bottom: 15px;
+    &--sub {
+      color: $white;
+      margin-bottom: 25px;
+    }
+  }
+}
+
+// SEARCH
+.search {
+  &__input {
+    border-radius: 5px 0 0 5px;
+    float: left;
+    height: 46px;
+    width: 400px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: $gray-50;
+    padding-left: 10px;
+  }
+  &__submit {
+    border-radius: 0 5px 5px 0;
+    float: left;
+    width: 60px;
+    border: none;
+    height: 46px;
+    background-color: $cyan-70;
+    cursor: pointer;
   }
 }
