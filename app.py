@@ -69,6 +69,8 @@ async def get_attraction(page: int, keyword: str | None=None):
 			myresult=mycursor.fetchall()
 			mycursor.close()
 			mydb.close()
+		for result in myresult:
+			result['images']=result['images'].split(' ')
 		if len(myresult)>per_page:
 			data=myresult[:per_page]
 			next_page=page+1
