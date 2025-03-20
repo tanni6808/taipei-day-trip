@@ -108,6 +108,7 @@ button {
   overflow: hidden;
   display: flex;
   padding: 13px 10px;
+  scroll-behavior: smooth;
 }
 .mrt__list > li {
   cursor: pointer;

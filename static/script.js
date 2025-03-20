@@ -3,8 +3,14 @@
 const mrtListEl = document.querySelector(".mrt__list");
 const attractionsEl = document.querySelector(".attractions");
 const footerEl = document.querySelector(".footer");
+const searchFormEl = document.querySelector(".search");
+const searchInputEl = document.querySelector(".search__input");
+const btnScrollMrtL = document.querySelector(".arrow--left");
+const btnScrollMrtR = document.querySelector(".arrow--right");
+
 let nextPage = 0;
 let attractionLastChildEl;
+let searchKeyword = "";
 attractionsEl.innerHTML = "";
 
 const initMrtList = async function () {
@@ -22,7 +28,7 @@ const getAttractionListAndRender = async function (page, keyword = "") {
   const url =
     keyword === ""
       ? `/api/attractions?page=${page}`
-      : `/api/attractions?page=${page}?keyword=${keyword}`;
+      : `/api/attractions?page=${page}&keyword=${keyword}`;
   let response = await fetch(url);
   let data = await response.json();
   nextPage = data.nextPage;
@@ -55,16 +61,11 @@ const renderAttractions = function (attractionArr) {
   attractionLastChildEl = attractionsEl.lastChild;
 };
 
-window.addEventListener("load", initMrtList);
-window.addEventListener("load", () => {
-  getAttractionListAndRender(0);
-});
-
 const obsCallback = function (entires, observer) {
   entires.forEach((entry) => {
     if (entry.isIntersecting && attractionLastChildEl) {
       if (nextPage === null) return observer.unobserve(footerEl);
-      getAttractionListAndRender(nextPage);
+      getAttractionListAndRender(nextPage, searchKeyword);
     }
   });
 };
@@ -78,4 +79,25 @@ const attractionLastChildObs = new IntersectionObserver(
   obsCallback,
   obsOptions
 );
-attractionLastChildObs.observe(footerEl);
+
+window.addEventListener("load", initMrtList);
+window.addEventListener("load", () => {
+  getAttractionListAndRender(0);
+  attractionLastChildObs.observe(footerEl);
+});
+
+searchFormEl.addEventListener("submit", (e) => {
+  e.preventDefault();
+  searchKeyword = searchInputEl.value;
+  attractionsEl.innerHTML = "";
+  attractionLastChildEl = attractionsEl.lastChild;
+  getAttractionListAndRender(0, searchKeyword);
+  attractionLastChildObs.observe(footerEl);
+});
+
+btnScrollMrtL.addEventListener("click", () => {
+  mrtListEl.scrollLeft -= 500;
+});
+btnScrollMrtR.addEventListener("click", () => {
+  mrtListEl.scrollLeft += 500;
+});

@@ -108,7 +108,11 @@ async def get_mrts():
 		myresult=mycursor.fetchall()
 		mycursor.close()
 		mydb.close()
-		data=[mrt[0] for mrt in myresult]
+		data=[]
+		for mrt in myresult:
+			if mrt[0]!='無':
+				data.append(mrt)
+		# data=[mrt[0] for mrt in myresult]
 		return {'data': data}
 	except:
 		return JSONResponse(status_code=500, content={"error": True, "message": "發生內部錯誤，無法取得資料"})
