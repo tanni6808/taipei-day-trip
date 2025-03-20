@@ -31,6 +31,10 @@ const getAttractionListAndRender = async function (page, keyword = "") {
       : `/api/attractions?page=${page}&keyword=${keyword}`;
   let response = await fetch(url);
   let data = await response.json();
+  if (data.data.length === 0) {
+    return (attractionsEl.innerText =
+      "查無相關景點資料！請使用其他關鍵字查詢。");
+  }
   nextPage = data.nextPage;
   renderAttractions(data.data);
 };
