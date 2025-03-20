@@ -107,7 +107,7 @@ btnScrollMrtR.addEventListener("click", () => {
 });
 
 mrtListEl.addEventListener("click", (e) => {
-  const clickedMrtEl = e.target;
+  const clickedMrtEl = e.target.closest("li");
   const clickedMrt = clickedMrtEl.innerText;
   searchInputEl.value = clickedMrt;
   searchFormEl.requestSubmit();
