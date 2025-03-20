@@ -143,6 +143,8 @@ button {
 }
 
 .attraction__card {
+  max-width: 330px;
+  width: 100%;
   outline: 1px solid #e8e8e8;
   outline-offset: -1px;
   border-radius: 5px;
@@ -155,12 +157,16 @@ button {
   background-size: cover;
   border-radius: 5px 5px 0 0;
 }
+@media screen and (max-width: 600px) {
+  .attraction__image {
+    height: 235px;
+  }
+}
 .attraction__name {
-  height: 40px;
+  min-height: 40px;
   color: white;
   background-color: rgba(0, 0, 0, 0.6);
   flex-grow: 1;
-  line-height: 13.3px;
   padding: 10px;
 }
 .attraction__details {
@@ -199,6 +205,11 @@ button {
   margin: 0 auto;
   padding: 85px 10px;
 }
+@media screen and (max-width: 1200px) {
+  .hero__container {
+    padding: 85px 20px;
+  }
+}
 
 .container {
   max-width: 1200px;
@@ -208,6 +219,7 @@ button {
 .attractions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  justify-items: center;
   gap: 30px;
   padding: 15px;
 }

@@ -4,6 +4,8 @@ const mrtListEl = document.querySelector(".mrt__list");
 const attractionsEl = document.querySelector(".attractions");
 const footerEl = document.querySelector(".footer");
 let nextPage = 0;
+let attractionLastChildEl;
+attractionsEl.innerHTML = "";
 
 const initMrtList = async function () {
   let response = await fetch("/api/mrts");
@@ -50,6 +52,7 @@ const renderAttractions = function (attractionArr) {
     aCardEl.append(aImgEl, aDetailEl);
     attractionsEl.appendChild(aCardEl);
   });
+  attractionLastChildEl = attractionsEl.lastChild;
 };
 
 window.addEventListener("load", initMrtList);
@@ -58,7 +61,12 @@ window.addEventListener("load", () => {
 });
 
 const obsCallback = function (entires, observer) {
-  entires.forEach((entry) => console.log(entry));
+  entires.forEach((entry) => {
+    if (entry.isIntersecting && attractionLastChildEl) {
+      if (nextPage === null) return observer.unobserve(footerEl);
+      getAttractionListAndRender(nextPage);
+    }
+  });
 };
 
 const obsOptions = {
@@ -66,5 +74,8 @@ const obsOptions = {
   threshold: 0.1, //cover area threshold
 };
 
-const observer = new IntersectionObserver(obsCallback, obsOptions);
-observer.observe(footerEl);
+const attractionLastChildObs = new IntersectionObserver(
+  obsCallback,
+  obsOptions
+);
+attractionLastChildObs.observe(footerEl);
