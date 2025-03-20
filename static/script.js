@@ -100,10 +100,10 @@ searchFormEl.addEventListener("submit", (e) => {
 });
 
 btnScrollMrtL.addEventListener("click", () => {
-  mrtListEl.scrollLeft -= 500;
+  mrtListEl.scrollLeft -= 330;
 });
 btnScrollMrtR.addEventListener("click", () => {
-  mrtListEl.scrollLeft += 500;
+  mrtListEl.scrollLeft += 330;
 });
 
 mrtListEl.addEventListener("click", (e) => {
