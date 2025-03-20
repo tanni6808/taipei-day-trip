@@ -105,3 +105,10 @@ btnScrollMrtL.addEventListener("click", () => {
 btnScrollMrtR.addEventListener("click", () => {
   mrtListEl.scrollLeft += 500;
 });
+
+mrtListEl.addEventListener("click", (e) => {
+  const clickedMrtEl = e.target;
+  const clickedMrt = clickedMrtEl.innerText;
+  searchInputEl.value = clickedMrt;
+  searchFormEl.requestSubmit();
+});
