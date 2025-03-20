@@ -32,10 +32,17 @@
   }
 }
 
+// MAIN
+main {
+  background-color: $white;
+  padding: 40px 0;
+}
+
 // CONTAINER
 .container {
   max-width: 1200px;
-  margin: 40px auto;
+  margin: 0 auto;
+  background-color: $white;
 }
 
 // ATTRACTIONS
@@ -49,7 +56,7 @@
 
 // FOOTER
 .footer {
-  height: 104px;
+  min-height: 104px;
   background-color: $gray-50;
   text-align: center;
   padding: 45px 0;

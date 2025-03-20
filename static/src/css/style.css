@@ -14,7 +14,7 @@ html {
 
 body {
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: #757575;
 }
 
 ::selection {
@@ -212,9 +212,15 @@ button {
   }
 }
 
+main {
+  background-color: #ffffff;
+  padding: 40px 0;
+}
+
 .container {
   max-width: 1200px;
-  margin: 40px auto;
+  margin: 0 auto;
+  background-color: #ffffff;
 }
 
 .attractions {
@@ -226,7 +232,7 @@ button {
 }
 
 .footer {
-  height: 104px;
+  min-height: 104px;
   background-color: #757575;
   text-align: center;
   padding: 45px 0;

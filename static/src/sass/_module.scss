@@ -73,6 +73,7 @@
     overflow: hidden;
     display: flex;
     padding: 13px 10px;
+    scroll-behavior: smooth;
     & > li {
       cursor: pointer;
       flex-shrink: 0;
