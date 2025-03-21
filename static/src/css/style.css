@@ -1,0 +1,243 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 16px;
+  font-family: "Noto Sans TC", sans-serif;
+  font-optical-sizing: auto;
+}
+
+body {
+  box-sizing: border-box;
+  background-color: #757575;
+}
+
+::selection {
+  color: #ffffff;
+  background-color: #aabbcc;
+}
+
+h1 {
+  font-size: 28px;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 30px;
+  line-height: 34px;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 24px;
+}
+
+button {
+  font-size: 19px;
+  line-height: 16px;
+}
+
+.nav__title {
+  color: #448899;
+}
+.nav__list {
+  list-style: none;
+  display: flex;
+}
+.nav__list > li {
+  line-height: 13.3px;
+  font-weight: 500;
+  color: #666666;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.hero__slogan {
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+.hero__slogan--sub {
+  color: #ffffff;
+  margin-bottom: 25px;
+}
+
+.search {
+  display: flex;
+  height: 46px;
+  max-width: 460px;
+}
+.search__input {
+  border-radius: 5px 0 0 5px;
+  height: inherit;
+  flex-grow: 1;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+  padding-left: 10px;
+}
+.search__input::placeholder {
+  color: #757575;
+}
+.search__submit {
+  border-radius: 0 5px 5px 0;
+  width: 60px;
+  flex-shrink: 0;
+  border: none;
+  height: inherit;
+  background-color: #448899;
+  cursor: pointer;
+}
+
+.mrt__container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+.mrt__list {
+  list-style: none;
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  padding: 13px 10px;
+  scroll-behavior: smooth;
+}
+.mrt__list > li {
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 13.3px;
+  padding: 5px 15px;
+  color: #666666;
+  transition: color 0.2s;
+}
+.mrt__list > li:hover {
+  color: #000000;
+}
+
+.arrow {
+  height: 32px;
+  width: 32px;
+  flex-shrink: 0;
+  transition: background-image 0.2s;
+}
+.arrow--left {
+  margin-left: 15px;
+  background-image: url("../img/arrow-left_default.png");
+}
+.arrow--left:hover {
+  background-image: url("../img/arrow-left_hovered.png");
+}
+.arrow--right {
+  background-image: url("../img/arrow-right_default.png");
+  margin-right: 15px;
+}
+.arrow--right:hover {
+  background-image: url("../img/arrow-right_hovered.png");
+}
+
+.attraction__card {
+  max-width: 330px;
+  width: 100%;
+  outline: 1px solid #e8e8e8;
+  outline-offset: -1px;
+  border-radius: 5px;
+}
+.attraction__image {
+  display: flex;
+  align-items: flex-end;
+  height: 197px;
+  background-image: url("../img/test_attraction.png");
+  background-size: cover;
+  border-radius: 5px 5px 0 0;
+}
+@media screen and (max-width: 600px) {
+  .attraction__image {
+    height: 235px;
+  }
+}
+.attraction__name {
+  min-height: 40px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  flex-grow: 1;
+  padding: 10px;
+}
+.attraction__details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 45px;
+  padding: 10px;
+  color: #757575;
+}
+
+.nav {
+  height: 54px;
+  width: 100%;
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  padding: 10px;
+}
+.nav__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hero {
+  margin-top: 54px;
+  height: 320px;
+  background-image: url("../img/welcome-image.png");
+  background-size: cover;
+}
+.hero__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 85px 10px;
+}
+@media screen and (max-width: 1200px) {
+  .hero__container {
+    padding: 85px 20px;
+  }
+}
+
+main {
+  background-color: #ffffff;
+  padding: 40px 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #ffffff;
+}
+
+.attractions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  justify-items: center;
+  gap: 30px;
+  padding: 15px;
+}
+
+.footer {
+  min-height: 104px;
+  background-color: #757575;
+  text-align: center;
+  padding: 45px 0;
+  line-height: 13.3px;
+  color: #ffffff;
+}
+
+/*# sourceMappingURL=style.css.map */

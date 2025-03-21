@@ -1,5 +1,6 @@
 from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Annotated, Optional
 import mysql.connector
@@ -68,6 +69,8 @@ async def get_attraction(page: int, keyword: str | None=None):
 			myresult=mycursor.fetchall()
 			mycursor.close()
 			mydb.close()
+		for result in myresult:
+			result['images']=result['images'].split(' ')
 		if len(myresult)>per_page:
 			data=myresult[:per_page]
 			next_page=page+1
@@ -105,7 +108,13 @@ async def get_mrts():
 		myresult=mycursor.fetchall()
 		mycursor.close()
 		mydb.close()
-		data=[mrt[0] for mrt in myresult]
+		data=[]
+		for mrt in myresult:
+			if mrt[0]!='無':
+				data.append(mrt)
+		# data=[mrt[0] for mrt in myresult]
 		return {'data': data}
 	except:
 		return JSONResponse(status_code=500, content={"error": True, "message": "發生內部錯誤，無法取得資料"})
+	
+app.mount("/", StaticFiles(directory="static"))

@@ -1,0 +1,17 @@
+{
+  "name": "taipei-day-trip-static",
+  "version": "1.0.0",
+  "description": "taipei-day-trip static pages",
+  "main": "index.js",
+  "scripts": {
+    "watch:sass": "sass --watch src/sass/main.scss src/css/style.css",
+    "devserver": "live-server",
+    "start": "npm-run-all --parallel devserver watch:sass"
+  },
+  "author": "tanni",
+  "license": "ISC",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.85.1"
+  }
+}

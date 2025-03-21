@@ -1,0 +1,65 @@
+@use "./absctact" as *;
+// NAV
+.nav {
+  height: 54px;
+  width: 100%;
+  background-color: $white;
+  position: fixed;
+  top: 0;
+  padding: 10px;
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+// HERO
+.hero {
+  margin-top: 54px;
+  height: 320px;
+  background-image: url("../img/welcome-image.png");
+  background-size: cover;
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 85px 10px;
+    @media screen and (max-width: 1200px) {
+      padding: 85px 20px;
+    }
+  }
+}
+
+// MAIN
+main {
+  background-color: $white;
+  padding: 40px 0;
+}
+
+// CONTAINER
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: $white;
+}
+
+// ATTRACTIONS
+.attractions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  justify-items: center;
+  gap: 30px;
+  padding: 15px;
+}
+
+// FOOTER
+.footer {
+  min-height: 104px;
+  background-color: $gray-50;
+  text-align: center;
+  padding: 45px 0;
+  line-height: 13.3px;
+  color: $white;
+}
