@@ -111,7 +111,7 @@ async def get_mrts():
 		data=[]
 		for mrt in myresult:
 			if mrt[0]!='無':
-				data.append(mrt)
+				data.append(mrt[0])
 		# data=[mrt[0] for mrt in myresult]
 		return {'data': data}
 	except:
