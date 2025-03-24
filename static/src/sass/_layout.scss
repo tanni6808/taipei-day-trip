@@ -14,11 +14,13 @@
     justify-content: space-between;
     align-items: center;
   }
+  & > hr {
+    margin: 10px -10px;
+  }
 }
 
 // HERO
 .hero {
-  margin-top: 54px;
   height: 320px;
   background-image: url("../img/welcome-image.png");
   background-size: cover;
@@ -35,17 +37,18 @@
 // MAIN
 main {
   background-color: $white;
-  padding: 40px 0;
+  padding-top: 54px;
 }
 
 // CONTAINER
 .container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0px auto;
+  padding: 40px 0;
   background-color: $white;
 }
 
-// ATTRACTIONS
+// INDEX > ATTRACTIONS
 .attractions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -54,6 +57,40 @@ main {
   padding: 15px;
 }
 
+// ATTRACTION
+.attraction {
+  &__head {
+    display: flex;
+    gap: 30px;
+    padding: 0 15px;
+  }
+  &__gallery {
+    list-style: none;
+    display: flex;
+    & > li {
+      border-radius: 5px;
+      width: 540px;
+      height: 400px;
+      background-image: url("../img/test_attraction.png");
+      background-size: cover;
+    }
+  }
+  &__info {
+    color: $gray-50;
+    flex-grow: 1;
+    & > h3 {
+      margin-bottom: 15px;
+    }
+  }
+  &__sub {
+    margin-bottom: 20px;
+  }
+  &__reservation {
+    background-color: $gray-20;
+    padding: 15px 20px;
+    border-radius: 5px;
+  }
+}
 // FOOTER
 .footer {
   min-height: 104px;

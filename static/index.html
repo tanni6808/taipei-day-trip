@@ -23,27 +23,28 @@
         </ul>
       </div>
     </nav>
-    <header class="hero">
-      <div class="hero__container">
-        <h1 class="hero__slogan">輕鬆享受台北一日休閒</h1>
-        <div class="hero__slogan--sub">
-          探索每個角落，體驗程式的深度旅遊行程
-        </div>
-        <form action="" class="search">
-          <input
-            type="text"
-            name=""
-            id=""
-            class="search__input"
-            placeholder="輸入景點名稱查詢"
-          />
-          <button type="submit" class="search__submit">
-            <img src="./src/img/icon_search.png" alt="" />
-          </button>
-        </form>
-      </div>
-    </header>
     <main>
+      <header class="hero">
+        <div class="hero__container">
+          <h1 class="hero__slogan">輕鬆享受台北一日休閒</h1>
+          <div class="hero__slogan--sub">
+            探索每個角落，體驗程式的深度旅遊行程
+          </div>
+          <form action="" class="search">
+            <input
+              type="text"
+              name=""
+              id=""
+              class="search__input"
+              placeholder="輸入景點名稱查詢"
+            />
+            <button type="submit" class="search__submit">
+              <img src="./src/img/icon_search.png" alt="" />
+            </button>
+          </form>
+        </div>
+      </header>
+
       <div class="container">
         <div class="mrt__container">
           <div class="arrow arrow--left"></div>
@@ -51,17 +52,17 @@
           <div class="arrow arrow--right"></div>
         </div>
         <section class="attractions">
-          <div class="attraction__card">
-            <div class="attraction__image">
-              <div class="attraction__name">
+          <a href="./attraction.html" class="attraction-card">
+            <div class="attraction-card__image">
+              <div class="attraction-card__name">
                 一個很長很長很長的名字用來測試的謝謝
               </div>
             </div>
-            <div class="attraction__details">
-              <div class="a-detail__mrt">捷運站</div>
-              <div class="a-detail__category">景點類別</div>
+            <div class="attraction-card__details">
+              <div>捷運站</div>
+              <div>景點類別</div>
             </div>
-          </div>
+          </a>
         </section>
       </div>
     </main>

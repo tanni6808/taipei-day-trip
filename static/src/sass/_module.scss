@@ -66,6 +66,24 @@
     display: flex;
     align-items: center;
     justify-content: start;
+    & > .arrow {
+      height: 32px;
+      width: 32px;
+    }
+    & > .arrow--left {
+      margin-left: 15px;
+      background-image: url("../img/arrow-left_default.png");
+      &:hover {
+        background-image: url("../img/arrow-left_hovered.png");
+      }
+    }
+    & > .arrow--right {
+      margin-right: 15px;
+      background-image: url("../img/arrow-right_default.png");
+      &:hover {
+        background-image: url("../img/arrow-right_hovered.png");
+      }
+    }
   }
   &__list {
     list-style: none;
@@ -89,35 +107,17 @@
 }
 
 .arrow {
-  height: 32px;
-  width: 32px;
   flex-shrink: 0;
   transition: background-image 0.2s;
-  &--left {
-    margin-left: 15px;
-    background-image: url("../img/arrow-left_default.png");
-    &:hover {
-      background-image: url("../img/arrow-left_hovered.png");
-    }
-  }
-  &--right {
-    background-image: url("../img/arrow-right_default.png");
-    margin-right: 15px;
-    &:hover {
-      background-image: url("../img/arrow-right_hovered.png");
-    }
-  }
 }
 
 // ATTRACTIONS
-.attraction {
-  &__card {
-    max-width: 330px;
-    width: 100%;
-    outline: 1px solid $gray-20;
-    outline-offset: -1px;
-    border-radius: 5px;
-  }
+.attraction-card {
+  max-width: 330px;
+  width: 100%;
+  outline: 1px solid $gray-20;
+  outline-offset: -1px;
+  border-radius: 5px;
   &__image {
     display: flex;
     align-items: flex-end;
@@ -143,5 +143,21 @@
     height: 45px;
     padding: 10px;
     color: $gray-50;
+  }
+}
+
+// ATTRACTION
+.attraction__reservation-form {
+  & > .form {
+    display: flex;
+    margin-bottom: 15px;
+  }
+  & > button {
+    border: none;
+    padding: 10px 20px;
+    color: $white;
+    background-color: $cyan-70;
+    border-radius: 5px;
+    margin-top: 10px;
   }
 }

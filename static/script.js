@@ -11,7 +11,7 @@ const btnScrollMrtR = document.querySelector(".arrow--right");
 let nextPage = 0;
 let attractionLastChildEl;
 let searchKeyword = "";
-attractionsEl.innerHTML = "";
+// attractionsEl.innerHTML = "";
 
 const initMrtList = async function () {
   let response = await fetch("/api/mrts");
@@ -42,21 +42,19 @@ const getAttractionListAndRender = async function (page, keyword = "") {
 const renderAttractions = function (attractionArr) {
   attractionArr.forEach((attraction) => {
     const aCardEl = document.createElement("div");
-    aCardEl.classList.add("attraction__card");
+    aCardEl.classList.add("attraction-card");
     const aImgEl = document.createElement("div");
-    aImgEl.classList.add("attraction__image");
+    aImgEl.classList.add("attraction-card__image");
     aImgEl.style.backgroundImage = `url(${attraction.images[0]})`;
     const aNameEl = document.createElement("div");
-    aNameEl.classList.add("attraction__name");
+    aNameEl.classList.add("attraction-card__name");
     aNameEl.innerText = attraction.name;
     aImgEl.appendChild(aNameEl);
     const aDetailEl = document.createElement("div");
-    aDetailEl.classList.add("attraction__details");
+    aDetailEl.classList.add("attraction-card__details");
     const aDetailMrtEl = document.createElement("div");
-    aDetailMrtEl.classList.add("a-detail__mrt");
     aDetailMrtEl.innerText = attraction.mrt;
     const aDetailCategoryEl = document.createElement("div");
-    aDetailCategoryEl.classList.add("a-detail__category");
     aDetailCategoryEl.innerText = attraction.category;
     aDetailEl.append(aDetailMrtEl, aDetailCategoryEl);
     aCardEl.append(aImgEl, aDetailEl);
@@ -84,31 +82,36 @@ const attractionLastChildObs = new IntersectionObserver(
   obsOptions
 );
 
-window.addEventListener("load", initMrtList);
-window.addEventListener("load", () => {
-  getAttractionListAndRender(0);
-  attractionLastChildObs.observe(footerEl);
-});
+if (mrtListEl) {
+  window.addEventListener("load", initMrtList);
+  btnScrollMrtL.addEventListener("click", () => {
+    mrtListEl.scrollLeft -= 330;
+  });
+  btnScrollMrtR.addEventListener("click", () => {
+    mrtListEl.scrollLeft += 330;
+  });
 
-searchFormEl.addEventListener("submit", (e) => {
-  e.preventDefault();
-  searchKeyword = searchInputEl.value;
-  attractionsEl.innerHTML = "";
-  attractionLastChildEl = attractionsEl.lastChild;
-  getAttractionListAndRender(0, searchKeyword);
-  attractionLastChildObs.observe(footerEl);
-});
+  mrtListEl.addEventListener("click", (e) => {
+    const clickedMrtEl = e.target.closest("li");
+    const clickedMrt = clickedMrtEl.innerText;
+    searchInputEl.value = clickedMrt;
+    searchFormEl.requestSubmit();
+  });
+}
+if (attractionsEl) {
+  window.addEventListener("load", () => {
+    getAttractionListAndRender(0);
+    attractionLastChildObs.observe(footerEl);
+  });
+}
 
-btnScrollMrtL.addEventListener("click", () => {
-  mrtListEl.scrollLeft -= 330;
-});
-btnScrollMrtR.addEventListener("click", () => {
-  mrtListEl.scrollLeft += 330;
-});
-
-mrtListEl.addEventListener("click", (e) => {
-  const clickedMrtEl = e.target.closest("li");
-  const clickedMrt = clickedMrtEl.innerText;
-  searchInputEl.value = clickedMrt;
-  searchFormEl.requestSubmit();
-});
+if (searchFormEl) {
+  searchFormEl.addEventListener("submit", (e) => {
+    e.preventDefault();
+    searchKeyword = searchInputEl.value;
+    attractionsEl.innerHTML = "";
+    attractionLastChildEl = attractionsEl.lastChild;
+    getAttractionListAndRender(0, searchKeyword);
+    attractionLastChildObs.observe(footerEl);
+  });
+}

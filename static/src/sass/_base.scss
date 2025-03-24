@@ -52,4 +52,17 @@ button {
   line-height: 16px;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+hr {
+  height: 1px;
+  background-color: $gray-20;
+}
+
 // UTILITIES
+.bold {
+  font-weight: bold;
+}

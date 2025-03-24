@@ -44,6 +44,20 @@ button {
   line-height: 16px;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+hr {
+  height: 1px;
+  background-color: #e8e8e8;
+}
+
+.bold {
+  font-weight: bold;
+}
+
 .nav__title {
   color: #448899;
 }
@@ -102,6 +116,24 @@ button {
   align-items: center;
   justify-content: start;
 }
+.mrt__container > .arrow {
+  height: 32px;
+  width: 32px;
+}
+.mrt__container > .arrow--left {
+  margin-left: 15px;
+  background-image: url("../img/arrow-left_default.png");
+}
+.mrt__container > .arrow--left:hover {
+  background-image: url("../img/arrow-left_hovered.png");
+}
+.mrt__container > .arrow--right {
+  margin-right: 15px;
+  background-image: url("../img/arrow-right_default.png");
+}
+.mrt__container > .arrow--right:hover {
+  background-image: url("../img/arrow-right_hovered.png");
+}
 .mrt__list {
   list-style: none;
   flex-grow: 1;
@@ -123,34 +155,18 @@ button {
 }
 
 .arrow {
-  height: 32px;
-  width: 32px;
   flex-shrink: 0;
   transition: background-image 0.2s;
 }
-.arrow--left {
-  margin-left: 15px;
-  background-image: url("../img/arrow-left_default.png");
-}
-.arrow--left:hover {
-  background-image: url("../img/arrow-left_hovered.png");
-}
-.arrow--right {
-  background-image: url("../img/arrow-right_default.png");
-  margin-right: 15px;
-}
-.arrow--right:hover {
-  background-image: url("../img/arrow-right_hovered.png");
-}
 
-.attraction__card {
+.attraction-card {
   max-width: 330px;
   width: 100%;
   outline: 1px solid #e8e8e8;
   outline-offset: -1px;
   border-radius: 5px;
 }
-.attraction__image {
+.attraction-card__image {
   display: flex;
   align-items: flex-end;
   height: 197px;
@@ -159,24 +175,37 @@ button {
   border-radius: 5px 5px 0 0;
 }
 @media screen and (max-width: 600px) {
-  .attraction__image {
+  .attraction-card__image {
     height: 235px;
   }
 }
-.attraction__name {
+.attraction-card__name {
   min-height: 40px;
   color: white;
   background-color: rgba(0, 0, 0, 0.6);
   flex-grow: 1;
   padding: 10px;
 }
-.attraction__details {
+.attraction-card__details {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 45px;
   padding: 10px;
   color: #757575;
+}
+
+.attraction__reservation-form > .form {
+  display: flex;
+  margin-bottom: 15px;
+}
+.attraction__reservation-form > button {
+  border: none;
+  padding: 10px 20px;
+  color: #ffffff;
+  background-color: #448899;
+  border-radius: 5px;
+  margin-top: 10px;
 }
 
 .nav {
@@ -194,9 +223,11 @@ button {
   justify-content: space-between;
   align-items: center;
 }
+.nav > hr {
+  margin: 10px -10px;
+}
 
 .hero {
-  margin-top: 54px;
   height: 320px;
   background-image: url("../img/welcome-image.png");
   background-size: cover;
@@ -214,12 +245,13 @@ button {
 
 main {
   background-color: #ffffff;
-  padding: 40px 0;
+  padding-top: 54px;
 }
 
 .container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0px auto;
+  padding: 40px 0;
   background-color: #ffffff;
 }
 
@@ -229,6 +261,38 @@ main {
   justify-items: center;
   gap: 30px;
   padding: 15px;
+}
+
+.attraction__head {
+  display: flex;
+  gap: 30px;
+  padding: 0 15px;
+}
+.attraction__gallery {
+  list-style: none;
+  display: flex;
+}
+.attraction__gallery > li {
+  border-radius: 5px;
+  width: 540px;
+  height: 400px;
+  background-image: url("../img/test_attraction.png");
+  background-size: cover;
+}
+.attraction__info {
+  color: #757575;
+  flex-grow: 1;
+}
+.attraction__info > h3 {
+  margin-bottom: 15px;
+}
+.attraction__sub {
+  margin-bottom: 20px;
+}
+.attraction__reservation {
+  background-color: #e8e8e8;
+  padding: 15px 20px;
+  border-radius: 5px;
 }
 
 .footer {
