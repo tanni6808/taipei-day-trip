@@ -27,11 +27,20 @@
       <div class="container">
         <section class="attraction">
           <div class="attraction__head">
-            <ul class="attraction__gallery">
+            <div class="attraction__gallery">
               <div class="arrow arrow--left"></div>
-              <li></li>
+              <div class="attraction__slider">
+                <img src="./src/img/test_attraction.png" alt="" />
+                <img src="./src/img/test_attraction.png" alt="" />
+                <img src="./src/img/test_attraction.png" alt="" />
+              </div>
               <div class="arrow arrow--right"></div>
-            </ul>
+              <div class="attraction__slider-nav">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </div>
             <div class="attraction__info">
               <h3>景點名</h3>
               <div class="attraction__sub">類別 at 捷運站</div>
@@ -53,10 +62,14 @@
                   <div class="form">
                     <label class="form__label" for="">選擇時間：</label>
                     <div class="form__input">
-                      <input type="radio" name="" id="" />
-                      <label for="">上半天</label>
-                      <input type="radio" name="" id="" />
-                      <label for="">下半天</label>
+                      <div>
+                        <input type="radio" name="session" id="" checked />
+                        <label for="">上半天</label>
+                      </div>
+                      <div>
+                        <input type="radio" name="session" id="" />
+                        <label for="">下半天</label>
+                      </div>
                     </div>
                   </div>
                   <div class="form">
