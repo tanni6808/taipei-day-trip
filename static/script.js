@@ -12,20 +12,19 @@ const btnScrollMrtR = document.querySelector(".arrow--right");
 let nextPage = 0;
 let attractionLastChildEl;
 let searchKeyword = "";
-// attractionsEl.innerHTML = "";
+if (attractionsEl) attractionsEl.innerHTML = "";
 
 // ATTRACTION
+const pathParts = window.location.pathname.split("/");
+const attractionID = pathParts[pathParts.length - 1];
 const sliderEl = document.querySelector(".attraction__slider");
-const sliderImgEls = sliderEl?.querySelectorAll("img");
 const btnScrollSliderL = document
   .querySelector(".attraction__gallery")
   ?.querySelector(".arrow--left");
 const btnScrollSliderR = document
   .querySelector(".attraction__gallery")
   ?.querySelector(".arrow--right");
-const sliderNavDotEls = document
-  .querySelector(".attraction__slider-nav")
-  ?.querySelectorAll(".dot");
+const sliderNavEl = document.querySelector(".attraction__slider-nav");
 const sessionChooseEls = document.querySelectorAll(
   ".form__radio-container.session-choose"
 );
@@ -34,7 +33,7 @@ const sessionAfternoonEl = document.getElementById("session-afternoon");
 const sessionCostEl = document.getElementById("session-cost");
 
 let currentSlideIndex = 0;
-let totalSlides = sliderImgEls?.length;
+let sliderImgEls, sliderNavDotEls;
 
 // PAGE - INDEX
 const initMrtList = async function () {
@@ -65,7 +64,8 @@ const getAttractionListAndRender = async function (page, keyword = "") {
 
 const renderAttractions = function (attractionArr) {
   attractionArr.forEach((attraction) => {
-    const aCardEl = document.createElement("div");
+    const aCardEl = document.createElement("a");
+    aCardEl.href = `./attraction/${attraction.id}`;
     aCardEl.classList.add("attraction-card");
     const aImgEl = document.createElement("div");
     aImgEl.classList.add("attraction-card__image");
@@ -141,24 +141,43 @@ if (searchFormEl) {
 }
 
 // PAGE - ATTRACTION
-const goToSlide = function (index) {
-  const goToSlideIndex = (index + totalSlides) % totalSlides;
-  sliderNavDotEls.forEach((dot) => dot.classList.remove("active"));
-  sliderNavDotEls[goToSlideIndex].classList.add("active");
-  sliderEl.scrollTo({ left: sliderImgEls[0].clientWidth * goToSlideIndex });
+const getOneAttractionAndRender = async function (id) {
+  let response = await fetch(`/api/attraction/${id}`);
+  let data = await response.json();
+  const attractionData = data.data;
+  renderOneAttraction(attractionData);
 };
 
-if (sliderEl) {
-  btnScrollSliderL.addEventListener("click", (e) => {
-    currentSlideIndex--;
-    goToSlide(currentSlideIndex);
-  });
+const renderOneAttraction = function (attractionData) {
+  document.querySelector(".attraction__info>h3").textContent =
+    attractionData.name;
+  document.querySelector(".attraction__sub").textContent =
+    attractionData.mrt === "無"
+      ? attractionData.category
+      : attractionData.category + " at " + attractionData.mrt;
+  const attractionParagraphEls = document.querySelectorAll(
+    ".attraction__body>p"
+  );
+  attractionParagraphEls[0].textContent = attractionData.description;
+  attractionParagraphEls[1].textContent = attractionData.address;
+  attractionParagraphEls[2].textContent = attractionData.transport;
 
-  btnScrollSliderR.addEventListener("click", (e) => {
-    currentSlideIndex++;
-    goToSlide(currentSlideIndex);
+  // SLIDERS
+  sliderEl.innerHTML = "";
+  sliderNavEl.innerHTML = "";
+  attractionData.images.forEach((image) => {
+    const imageSlider = document.createElement("img");
+    imageSlider.src = image;
+    sliderEl.appendChild(imageSlider);
   });
-
+  sliderImgEls = sliderEl.querySelectorAll("img");
+  for (let i = 0; i < sliderImgEls.length; i++) {
+    const dot = document.createElement("div");
+    if (i === 0) dot.classList.add("active");
+    dot.classList.add("dot");
+    sliderNavEl.appendChild(dot);
+  }
+  sliderNavDotEls = sliderNavEl.querySelectorAll(".dot");
   sliderNavDotEls.forEach((el) => {
     el.addEventListener("click", (e) => {
       sliderNavDotEls.forEach((dot) => dot.classList.remove("active"));
@@ -169,6 +188,30 @@ if (sliderEl) {
       );
       goToSlide(currentSlideIndex);
     });
+  });
+};
+
+const goToSlide = function (index) {
+  let totalSlides = sliderImgEls.length;
+  const goToSlideIndex = (index + totalSlides) % totalSlides;
+  sliderNavDotEls.forEach((dot) => dot.classList.remove("active"));
+  sliderNavDotEls[goToSlideIndex].classList.add("active");
+  sliderEl.scrollTo({ left: sliderImgEls[0].clientWidth * goToSlideIndex });
+};
+
+if (pathParts[1] === "attraction") {
+  getOneAttractionAndRender(attractionID);
+}
+
+if (sliderEl) {
+  btnScrollSliderL.addEventListener("click", (e) => {
+    currentSlideIndex--;
+    goToSlide(currentSlideIndex);
+  });
+
+  btnScrollSliderR.addEventListener("click", (e) => {
+    currentSlideIndex++;
+    goToSlide(currentSlideIndex);
   });
 }
 
