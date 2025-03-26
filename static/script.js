@@ -204,14 +204,21 @@ if (pathParts[1] === "attraction") {
 }
 
 if (sliderEl) {
-  btnScrollSliderL.addEventListener("click", (e) => {
+  btnScrollSliderL.addEventListener("click", () => {
     currentSlideIndex--;
     goToSlide(currentSlideIndex);
   });
 
-  btnScrollSliderR.addEventListener("click", (e) => {
+  btnScrollSliderR.addEventListener("click", () => {
     currentSlideIndex++;
     goToSlide(currentSlideIndex);
+  });
+
+  window.addEventListener("resize", () => {
+    sliderEl.scrollTo({
+      left: sliderEl.clientWidth * currentSlideIndex,
+      behavior: "instant",
+    });
   });
 }
 

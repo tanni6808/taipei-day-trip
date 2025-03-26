@@ -66,13 +66,13 @@ hr {
   }
 }
 
-input[type=date] {
+input[type="date"] {
   border: none;
   padding: 5px 10px;
   transform: translateY(-2px);
 }
 
-input[type=radio] {
+input[type="radio"] {
   appearance: none;
   width: 18px;
   height: 18px;
@@ -83,7 +83,7 @@ input[type=radio] {
   margin: 0 5px;
   cursor: pointer;
 }
-input[type=radio]:checked {
+input[type="radio"]:checked {
   background-color: #448899;
 }
 
