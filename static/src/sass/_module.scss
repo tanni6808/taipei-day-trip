@@ -169,8 +169,7 @@
     width: 100%;
     height: 100%;
     display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    overflow-x: hidden;
     scroll-behavior: smooth;
     border-radius: 5px;
     & > img {
@@ -182,9 +181,9 @@
         max-height: 350px;
       }
     }
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    // &::-webkit-scrollbar {
+    //   display: none;
+    // }
   }
   &__slider-nav {
     display: flex;
