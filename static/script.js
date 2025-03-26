@@ -1,5 +1,6 @@
 "use strict";
 
+// INDEX
 const mrtListEl = document.querySelector(".mrt__list");
 const attractionsEl = document.querySelector(".attractions");
 const footerEl = document.querySelector(".footer");
@@ -13,6 +14,29 @@ let attractionLastChildEl;
 let searchKeyword = "";
 // attractionsEl.innerHTML = "";
 
+// ATTRACTION
+const sliderEl = document.querySelector(".attraction__slider");
+const sliderImgEls = sliderEl?.querySelectorAll("img");
+const btnScrollSliderL = document
+  .querySelector(".attraction__gallery")
+  ?.querySelector(".arrow--left");
+const btnScrollSliderR = document
+  .querySelector(".attraction__gallery")
+  ?.querySelector(".arrow--right");
+const sliderNavDotEls = document
+  .querySelector(".attraction__slider-nav")
+  ?.querySelectorAll(".dot");
+const sessionChooseEls = document.querySelectorAll(
+  ".form__radio-container.session-choose"
+);
+const sessionMorningEl = document.getElementById("session-morning");
+const sessionAfternoonEl = document.getElementById("session-afternoon");
+const sessionCostEl = document.getElementById("session-cost");
+
+let currentSlideIndex = 0;
+let totalSlides = sliderImgEls?.length;
+
+// PAGE - INDEX
 const initMrtList = async function () {
   let response = await fetch("/api/mrts");
   let data = await response.json();
@@ -113,5 +137,51 @@ if (searchFormEl) {
     attractionLastChildEl = attractionsEl.lastChild;
     getAttractionListAndRender(0, searchKeyword);
     attractionLastChildObs.observe(footerEl);
+  });
+}
+
+// PAGE - ATTRACTION
+const goToSlide = function (index) {
+  const goToSlideIndex = (index + totalSlides) % totalSlides;
+  sliderNavDotEls.forEach((dot) => dot.classList.remove("active"));
+  sliderNavDotEls[goToSlideIndex].classList.add("active");
+  sliderEl.scrollTo({ left: sliderImgEls[0].clientWidth * goToSlideIndex });
+};
+
+if (sliderEl) {
+  btnScrollSliderL.addEventListener("click", (e) => {
+    currentSlideIndex--;
+    goToSlide(currentSlideIndex);
+  });
+
+  btnScrollSliderR.addEventListener("click", (e) => {
+    currentSlideIndex++;
+    goToSlide(currentSlideIndex);
+  });
+
+  sliderNavDotEls.forEach((el) => {
+    el.addEventListener("click", (e) => {
+      sliderNavDotEls.forEach((dot) => dot.classList.remove("active"));
+      e.target.classList.add("active");
+      currentSlideIndex = Array.prototype.indexOf.call(
+        sliderNavDotEls,
+        e.target
+      );
+      goToSlide(currentSlideIndex);
+    });
+  });
+}
+
+if (sessionChooseEls.length > 0) {
+  sessionChooseEls.forEach((el) => {
+    el.addEventListener("click", (e) => {
+      const checkedSessionEl = e.target.closest("div").querySelector("input");
+      checkedSessionEl.checked = true;
+      if (checkedSessionEl === sessionAfternoonEl) {
+        sessionCostEl.textContent = "2500";
+      } else {
+        sessionCostEl.textContent = "2000";
+      }
+    });
   });
 }
