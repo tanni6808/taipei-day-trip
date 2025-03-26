@@ -121,8 +121,9 @@
     display: flex;
     align-items: flex-end;
     height: 197px;
-    background-image: url("../img/test_attraction.png");
+    background-color: $cyan-50;
     background-size: cover;
+    border-radius: 5px 5px 0 0;
     transition: all 0.2s;
     @media screen and (max-width: 600px) {
       height: 235px;
