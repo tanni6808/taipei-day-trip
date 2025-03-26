@@ -192,11 +192,11 @@ const renderOneAttraction = function (attractionData) {
 };
 
 const goToSlide = function (index) {
-  let totalSlides = sliderImgEls.length;
-  const goToSlideIndex = (index + totalSlides) % totalSlides;
+  // let totalSlides = sliderImgEls.length;
+  // const goToSlideIndex = (index + totalSlides) % totalSlides;
   sliderNavDotEls.forEach((dot) => dot.classList.remove("active"));
-  sliderNavDotEls[goToSlideIndex].classList.add("active");
-  sliderEl.scrollTo({ left: sliderImgEls[0].clientWidth * goToSlideIndex });
+  sliderNavDotEls[index].classList.add("active");
+  sliderEl.scrollTo({ left: sliderImgEls[0].clientWidth * index });
 };
 
 if (pathParts[1] === "attraction") {
@@ -205,12 +205,14 @@ if (pathParts[1] === "attraction") {
 
 if (sliderEl) {
   btnScrollSliderL.addEventListener("click", () => {
-    currentSlideIndex--;
+    let totalSlides = sliderImgEls.length;
+    currentSlideIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
     goToSlide(currentSlideIndex);
   });
 
   btnScrollSliderR.addEventListener("click", () => {
-    currentSlideIndex++;
+    let totalSlides = sliderImgEls.length;
+    currentSlideIndex = (currentSlideIndex + 1 + totalSlides) % totalSlides;
     goToSlide(currentSlideIndex);
   });
 
