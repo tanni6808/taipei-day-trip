@@ -1,5 +1,6 @@
 "use strict";
 
+// INDEX
 const mrtListEl = document.querySelector(".mrt__list");
 const attractionsEl = document.querySelector(".attractions");
 const footerEl = document.querySelector(".footer");
@@ -11,8 +12,30 @@ const btnScrollMrtR = document.querySelector(".arrow--right");
 let nextPage = 0;
 let attractionLastChildEl;
 let searchKeyword = "";
-attractionsEl.innerHTML = "";
+if (attractionsEl) attractionsEl.innerHTML = "";
 
+// ATTRACTION
+const pathParts = window.location.pathname.split("/");
+const attractionID = pathParts[pathParts.length - 1];
+const sliderEl = document.querySelector(".attraction__slider");
+const btnScrollSliderL = document
+  .querySelector(".attraction__gallery")
+  ?.querySelector(".arrow--left");
+const btnScrollSliderR = document
+  .querySelector(".attraction__gallery")
+  ?.querySelector(".arrow--right");
+const sliderNavEl = document.querySelector(".attraction__slider-nav");
+const sessionChooseEls = document.querySelectorAll(
+  ".form__radio-container.session-choose"
+);
+const sessionMorningEl = document.getElementById("session-morning");
+const sessionAfternoonEl = document.getElementById("session-afternoon");
+const sessionCostEl = document.getElementById("session-cost");
+
+let currentSlideIndex = 0;
+let sliderImgEls, sliderNavDotEls;
+
+// PAGE - INDEX
 const initMrtList = async function () {
   let response = await fetch("/api/mrts");
   let data = await response.json();
@@ -41,22 +64,21 @@ const getAttractionListAndRender = async function (page, keyword = "") {
 
 const renderAttractions = function (attractionArr) {
   attractionArr.forEach((attraction) => {
-    const aCardEl = document.createElement("div");
-    aCardEl.classList.add("attraction__card");
+    const aCardEl = document.createElement("a");
+    aCardEl.href = `./attraction/${attraction.id}`;
+    aCardEl.classList.add("attraction-card");
     const aImgEl = document.createElement("div");
-    aImgEl.classList.add("attraction__image");
+    aImgEl.classList.add("attraction-card__image");
     aImgEl.style.backgroundImage = `url(${attraction.images[0]})`;
     const aNameEl = document.createElement("div");
-    aNameEl.classList.add("attraction__name");
+    aNameEl.classList.add("attraction-card__name");
     aNameEl.innerText = attraction.name;
     aImgEl.appendChild(aNameEl);
     const aDetailEl = document.createElement("div");
-    aDetailEl.classList.add("attraction__details");
+    aDetailEl.classList.add("attraction-card__details");
     const aDetailMrtEl = document.createElement("div");
-    aDetailMrtEl.classList.add("a-detail__mrt");
     aDetailMrtEl.innerText = attraction.mrt;
     const aDetailCategoryEl = document.createElement("div");
-    aDetailCategoryEl.classList.add("a-detail__category");
     aDetailCategoryEl.innerText = attraction.category;
     aDetailEl.append(aDetailMrtEl, aDetailCategoryEl);
     aCardEl.append(aImgEl, aDetailEl);
@@ -84,31 +106,134 @@ const attractionLastChildObs = new IntersectionObserver(
   obsOptions
 );
 
-window.addEventListener("load", initMrtList);
-window.addEventListener("load", () => {
-  getAttractionListAndRender(0);
-  attractionLastChildObs.observe(footerEl);
-});
+if (mrtListEl) {
+  window.addEventListener("load", initMrtList);
+  btnScrollMrtL.addEventListener("click", () => {
+    mrtListEl.scrollLeft -= 330;
+  });
+  btnScrollMrtR.addEventListener("click", () => {
+    mrtListEl.scrollLeft += 330;
+  });
 
-searchFormEl.addEventListener("submit", (e) => {
-  e.preventDefault();
-  searchKeyword = searchInputEl.value;
-  attractionsEl.innerHTML = "";
-  attractionLastChildEl = attractionsEl.lastChild;
-  getAttractionListAndRender(0, searchKeyword);
-  attractionLastChildObs.observe(footerEl);
-});
+  mrtListEl.addEventListener("click", (e) => {
+    const clickedMrtEl = e.target.closest("li");
+    const clickedMrt = clickedMrtEl.innerText;
+    searchInputEl.value = clickedMrt;
+    searchFormEl.requestSubmit();
+  });
+}
+if (attractionsEl) {
+  window.addEventListener("load", () => {
+    getAttractionListAndRender(0);
+    attractionLastChildObs.observe(footerEl);
+  });
+}
 
-btnScrollMrtL.addEventListener("click", () => {
-  mrtListEl.scrollLeft -= 330;
-});
-btnScrollMrtR.addEventListener("click", () => {
-  mrtListEl.scrollLeft += 330;
-});
+if (searchFormEl) {
+  searchFormEl.addEventListener("submit", (e) => {
+    e.preventDefault();
+    searchKeyword = searchInputEl.value;
+    attractionsEl.innerHTML = "";
+    attractionLastChildEl = attractionsEl.lastChild;
+    getAttractionListAndRender(0, searchKeyword);
+    attractionLastChildObs.observe(footerEl);
+  });
+}
 
-mrtListEl.addEventListener("click", (e) => {
-  const clickedMrtEl = e.target.closest("li");
-  const clickedMrt = clickedMrtEl.innerText;
-  searchInputEl.value = clickedMrt;
-  searchFormEl.requestSubmit();
-});
+// PAGE - ATTRACTION
+const getOneAttractionAndRender = async function (id) {
+  let response = await fetch(`/api/attraction/${id}`);
+  let data = await response.json();
+  const attractionData = data.data;
+  renderOneAttraction(attractionData);
+};
+
+const renderOneAttraction = function (attractionData) {
+  document.querySelector(".attraction__info>h3").textContent =
+    attractionData.name;
+  document.querySelector(".attraction__sub").textContent =
+    attractionData.mrt === "無"
+      ? attractionData.category
+      : attractionData.category + " at " + attractionData.mrt;
+  const attractionParagraphEls = document.querySelectorAll(
+    ".attraction__body>p"
+  );
+  attractionParagraphEls[0].textContent = attractionData.description;
+  attractionParagraphEls[1].textContent = attractionData.address;
+  attractionParagraphEls[2].textContent = attractionData.transport;
+
+  // SLIDERS
+  sliderEl.innerHTML = "";
+  sliderNavEl.innerHTML = "";
+  attractionData.images.forEach((image) => {
+    const imageSlider = document.createElement("img");
+    imageSlider.src = image;
+    sliderEl.appendChild(imageSlider);
+  });
+  sliderImgEls = sliderEl.querySelectorAll("img");
+  for (let i = 0; i < sliderImgEls.length; i++) {
+    const dot = document.createElement("div");
+    if (i === 0) dot.classList.add("active");
+    dot.classList.add("dot");
+    sliderNavEl.appendChild(dot);
+  }
+  sliderNavDotEls = sliderNavEl.querySelectorAll(".dot");
+  sliderNavDotEls.forEach((el) => {
+    el.addEventListener("click", (e) => {
+      sliderNavDotEls.forEach((dot) => dot.classList.remove("active"));
+      e.target.classList.add("active");
+      currentSlideIndex = Array.prototype.indexOf.call(
+        sliderNavDotEls,
+        e.target
+      );
+      goToSlide(currentSlideIndex);
+    });
+  });
+};
+
+const goToSlide = function (index) {
+  // let totalSlides = sliderImgEls.length;
+  // const goToSlideIndex = (index + totalSlides) % totalSlides;
+  sliderNavDotEls.forEach((dot) => dot.classList.remove("active"));
+  sliderNavDotEls[index].classList.add("active");
+  sliderEl.scrollTo({ left: sliderImgEls[0].clientWidth * index });
+};
+
+if (pathParts[1] === "attraction") {
+  getOneAttractionAndRender(attractionID);
+}
+
+if (sliderEl) {
+  btnScrollSliderL.addEventListener("click", () => {
+    let totalSlides = sliderImgEls.length;
+    currentSlideIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
+    goToSlide(currentSlideIndex);
+  });
+
+  btnScrollSliderR.addEventListener("click", () => {
+    let totalSlides = sliderImgEls.length;
+    currentSlideIndex = (currentSlideIndex + 1 + totalSlides) % totalSlides;
+    goToSlide(currentSlideIndex);
+  });
+
+  window.addEventListener("resize", () => {
+    sliderEl.scrollTo({
+      left: sliderEl.clientWidth * currentSlideIndex,
+      behavior: "instant",
+    });
+  });
+}
+
+if (sessionChooseEls.length > 0) {
+  sessionChooseEls.forEach((el) => {
+    el.addEventListener("click", (e) => {
+      const checkedSessionEl = e.target.closest("div").querySelector("input");
+      checkedSessionEl.checked = true;
+      if (checkedSessionEl === sessionAfternoonEl) {
+        sessionCostEl.textContent = "2500";
+      } else {
+        sessionCostEl.textContent = "2000";
+      }
+    });
+  });
+}

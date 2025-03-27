@@ -50,6 +50,53 @@ h3 {
 button {
   font-size: 19px;
   line-height: 16px;
+  cursor: pointer;
+}
+
+p {
+  font-size: 16px;
+  line-height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: $gray-20;
+}
+
+section > hr {
+  @media screen and (max-width: 1200px) {
+    margin: 0 10px;
+  }
+}
+
+input[type="date"] {
+  border: none;
+  padding: 5px 10px;
+  transform: translateY(-2px);
+}
+
+input[type="radio"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid $white;
+  border-radius: 100%;
+  background-color: $white;
+  transform: translateY(2px);
+  margin: 0 5px;
+  cursor: pointer;
+  &:checked {
+    background-color: $cyan-70;
+  }
 }
 
 // UTILITIES
+.bold {
+  font-weight: bold;
+}
