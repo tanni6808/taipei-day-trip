@@ -70,20 +70,6 @@
       height: 32px;
       width: 32px;
     }
-    & > .arrow--left {
-      margin-left: 15px;
-      background-image: url("../img/arrow-left_default.png");
-      &:hover {
-        background-image: url("../img/arrow-left_hovered.png");
-      }
-    }
-    & > .arrow--right {
-      margin-right: 15px;
-      background-image: url("../img/arrow-right_default.png");
-      &:hover {
-        background-image: url("../img/arrow-right_hovered.png");
-      }
-    }
   }
   &__list {
     list-style: none;
@@ -155,16 +141,6 @@
     cursor: pointer;
     width: 36px;
     height: 36px;
-    opacity: 0.75;
-    &:hover {
-      opacity: 1;
-    }
-    &--left {
-      background-image: url("../img/arrow-left-nb_default.png");
-    }
-    &--right {
-      background-image: url("../img/arrow-right-nb_default.png");
-    }
   }
   &__slider {
     width: 100%;

@@ -6,8 +6,8 @@ const attractionsEl = document.querySelector(".attractions");
 const footerEl = document.querySelector(".footer");
 const searchFormEl = document.querySelector(".search");
 const searchInputEl = document.querySelector(".search__input");
-const btnScrollMrtL = document.querySelector(".arrow--left");
-const btnScrollMrtR = document.querySelector(".arrow--right");
+const btnScrollMrtL = document.querySelector(".mrt__container>.arrow-left");
+const btnScrollMrtR = document.querySelector(".mrt__container>.arrow-right");
 
 let nextPage = 0;
 let attractionLastChildEl;
@@ -20,10 +20,10 @@ const attractionID = pathParts[pathParts.length - 1];
 const sliderEl = document.querySelector(".attraction__slider");
 const btnScrollSliderL = document
   .querySelector(".attraction__gallery")
-  ?.querySelector(".arrow--left");
+  ?.querySelector(".arrow-left");
 const btnScrollSliderR = document
   .querySelector(".attraction__gallery")
-  ?.querySelector(".arrow--right");
+  ?.querySelector(".arrow-right");
 const sliderNavEl = document.querySelector(".attraction__slider-nav");
 const sessionChooseEls = document.querySelectorAll(
   ".form__radio-container.session-choose"
@@ -142,10 +142,18 @@ if (searchFormEl) {
 
 // PAGE - ATTRACTION
 const getOneAttractionAndRender = async function (id) {
-  let response = await fetch(`/api/attraction/${id}`);
-  let data = await response.json();
-  const attractionData = data.data;
-  renderOneAttraction(attractionData);
+  try {
+    let response = await fetch(`/api/attraction/${id}`);
+    if (!response.ok)
+      throw new Error(`找不到景點(${response.status} ${response.statusText})`);
+    let data = await response.json();
+    const attractionData = data.data;
+    renderOneAttraction(attractionData);
+  } catch (err) {
+    // console.log(err);
+    document.querySelector("section.attraction").innerHTML = "";
+    document.querySelector("section.attraction").textContent = err;
+  }
 };
 
 const renderOneAttraction = function (attractionData) {
@@ -170,6 +178,13 @@ const renderOneAttraction = function (attractionData) {
     imageSlider.src = image;
     sliderEl.appendChild(imageSlider);
   });
+  // don't render arrows & dots when there's only one image
+  if (attractionData.images.length === 1) {
+    document
+      .querySelectorAll(".attraction__gallery>.arrow")
+      .forEach((node) => node.remove());
+    return;
+  }
   sliderImgEls = sliderEl.querySelectorAll("img");
   for (let i = 0; i < sliderImgEls.length; i++) {
     const dot = document.createElement("div");
