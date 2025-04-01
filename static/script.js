@@ -1,5 +1,12 @@
 "use strict";
 
+// POPUP
+const btnSignUpInEl = document.getElementById("btn-signup-in");
+const popupEl = document.querySelector(".popup");
+const popupContainerEl = document.querySelector(".popup__container");
+const btnPopupCloseEl = document.querySelector(".popup__container>.close");
+const btnSwitchEl = document.getElementById("btn-switch-signup-in");
+
 // INDEX
 const mrtListEl = document.querySelector(".mrt__list");
 const attractionsEl = document.querySelector(".attractions");
@@ -34,6 +41,29 @@ const sessionCostEl = document.getElementById("session-cost");
 
 let currentSlideIndex = 0;
 let sliderImgEls, sliderNavDotEls;
+
+// PAGE - POPUP
+btnSignUpInEl.addEventListener("click", () => {
+  popupEl.classList.remove("hidden");
+});
+
+btnPopupCloseEl.addEventListener("click", () => {
+  popupEl.classList.add("hidden");
+});
+
+btnSwitchEl.addEventListener("click", () => {
+  if (popupEl.querySelector("form").id === "signin") {
+    popupEl.querySelector("h3").innerText = "註冊會員帳號";
+    popupContainerEl.removeChild(popupContainerEl.querySelector("form"));
+  } else {
+    console.log("is signup");
+    popupEl.querySelector("h3").innerText = "登入會員帳號";
+  }
+});
+
+const createFormEl = function (type) {
+  const formEl = document.createComment("form");
+};
 
 // PAGE - INDEX
 const initMrtList = async function () {

@@ -118,6 +118,11 @@ input[type=radio]:checked {
   opacity: 1;
 }
 
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .nav__title {
   color: #448899;
 }
@@ -324,6 +329,73 @@ input[type=radio]:checked {
   background-color: #448899;
   border-radius: 5px;
   margin-top: 10px;
+}
+
+.popup {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  background-color: rgba(0, 0, 0, 0.25);
+  transition: all 0.2s;
+}
+.popup__top-border-wrap {
+  width: 340px;
+  position: absolute;
+  top: 80px;
+  left: 50vw;
+  border-radius: 5px;
+  transform: translateX(-50%);
+  background: linear-gradient(to right, #66aabb, #337788);
+  padding-top: 10px;
+}
+.popup__container {
+  text-align: center;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 0 0 5px 5px;
+  padding: 15px;
+  border-top: 10px solid linear-gradient(to right, #66aabb, #337788);
+}
+.popup__container > .close {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  cursor: pointer;
+}
+.popup__container > h3 {
+  color: #666666;
+}
+.popup__container > form {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+.popup__container > form > input {
+  height: 47px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  padding-left: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 13.3px;
+}
+.popup__container > form > button {
+  border: none;
+  color: #ffffff;
+  padding: 15px;
+  margin: 5px 0;
+  border-radius: 5px;
+  background-color: #448899;
+}
+.popup__container > .hint {
+  color: #666666;
+}
+.popup__container > .hint > span {
+  cursor: pointer;
 }
 
 .nav {

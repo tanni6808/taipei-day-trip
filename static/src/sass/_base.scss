@@ -126,3 +126,8 @@ input[type="radio"] {
     opacity: 1;
   }
 }
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
