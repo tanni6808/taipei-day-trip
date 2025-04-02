@@ -394,7 +394,8 @@ input[type=radio]:checked {
 .popup__container > .hint {
   color: #666666;
 }
-.popup__container > .hint > span {
+.popup__container > span {
+  color: #666666;
   cursor: pointer;
 }
 

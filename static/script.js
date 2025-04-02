@@ -5,6 +5,7 @@ const btnSignUpInEl = document.getElementById("btn-signup-in");
 const popupEl = document.querySelector(".popup");
 const popupContainerEl = document.querySelector(".popup__container");
 const btnPopupCloseEl = document.querySelector(".popup__container>.close");
+const popupHintEl = document.querySelector(".popup__container>.hint");
 const btnSwitchEl = document.getElementById("btn-switch-signup-in");
 
 // INDEX
@@ -52,17 +53,47 @@ btnPopupCloseEl.addEventListener("click", () => {
 });
 
 btnSwitchEl.addEventListener("click", () => {
+  let formEl;
   if (popupEl.querySelector("form").id === "signin") {
     popupEl.querySelector("h3").innerText = "註冊會員帳號";
     popupContainerEl.removeChild(popupContainerEl.querySelector("form"));
+    formEl = createFormEl("signup");
+    btnSwitchEl.innerText = "點此登入";
+    popupHintEl.innerHTML = "";
+    popupHintEl.append("已經有帳戶了？", btnSwitchEl);
   } else {
-    console.log("is signup");
     popupEl.querySelector("h3").innerText = "登入會員帳號";
+    popupContainerEl.removeChild(popupContainerEl.querySelector("form"));
+    formEl = createFormEl("signin");
+    btnSwitchEl.innerText = "點此註冊";
+    popupHintEl.innerHTML = "";
+    popupHintEl.append("還沒有帳戶？", btnSwitchEl);
   }
+  popupContainerEl.insertBefore(formEl, popupHintEl);
 });
 
 const createFormEl = function (type) {
-  const formEl = document.createComment("form");
+  const formEl = document.createElement("form");
+  formEl.id = type;
+  const inputEmailEl = document.createElement("input");
+  inputEmailEl.type = "email";
+  inputEmailEl.placeholder = "輸入電子信箱";
+  const inputPaswordEl = document.createElement("input");
+  inputPaswordEl.type = "password";
+  inputPaswordEl.placeholder = "輸入密碼";
+  const btnSubmitEl = document.createElement("button");
+  btnSubmitEl.type = "submit";
+  formEl.append(inputEmailEl, inputPaswordEl, btnSubmitEl);
+  if (type === "signup") {
+    btnSubmitEl.innerText = "註冊新帳戶";
+    const inputNameEl = document.createElement("input");
+    inputNameEl.type = "text";
+    inputNameEl.placeholder = "輸入姓名";
+    formEl.prepend(inputNameEl);
+    return formEl;
+  }
+  btnSubmitEl.innerText = "登入帳戶";
+  return formEl;
 };
 
 // PAGE - INDEX
