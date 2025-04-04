@@ -22,6 +22,15 @@ mydbpool=mysql.connector.pooling.MySQLConnectionPool(
 
 app=FastAPI()
 
+class SignUpData(BaseModel):
+	name: str
+	email: str
+	password: str
+
+class SignInData(BaseModel):
+	email: str
+	password: str
+
 class Attraction(BaseModel):
 	id: int
 	name: str
@@ -52,7 +61,35 @@ async def booking(request: Request):
 async def thankyou(request: Request):
 	return FileResponse("./static/thankyou.html", media_type="text/html")
 
+# USER
+@app.post("/api/user")
+async def post_signup(data: SignUpData):
+	try: 
+		mydb=mydbpool.get_connection()
+		mycursor=mydb.cursor()
+		mycursor.execute('SELECT*FROM user WHERE email = %s', (data.email, ))
+		myresult=mycursor.fetchall()
+		mycursor.close()
+		if myresult == []:
+			mycursor=mydb.cursor()
+			mycursor.execute('INSERT INTO user (name, email, password) VALUE (%s, %s, %s)', (data.name, data.email, data.password))
+			mydb.commit()
+			print('sign up ok')
+			return {"ok": True}
+		return {"error": True, 'message': "註冊失敗，Email已被使用"}
+	except:
+		print('not ok')
+		return {"error": True, "message": "內部錯誤，無法註冊帳戶"}
+	
+@app.get('/api/user/auth')
+async def get_user():
+	return {"data": None}
 
+@app.put('/api/user/auth')
+async def put_signin():
+	return {"data": "signin"}
+
+# ATTRACTION
 @app.get("/api/attractions", responses={500: {'model': Error}})
 async def get_attraction(page: int, keyword: str | None=None):
 	try:

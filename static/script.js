@@ -43,9 +43,30 @@ const sessionCostEl = document.getElementById("session-cost");
 let currentSlideIndex = 0;
 let sliderImgEls, sliderNavDotEls;
 
-// PAGE - POPUP
+// COMMON - SIGN IN STATUS CHECK
+window.onload = () => {
+  fetch("/api/user/auth")
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.data === null) {
+        console.log("not sign in");
+      } else {
+        console.log("sign in");
+        const navListEl = document.querySelector(".nav__list");
+        const btnSignOutEl = document.createElement("li");
+        btnSignOutEl.innerText = "登出系統";
+        navListEl.removeChild(navListEl.lastElementChild);
+        navListEl.appendChild(btnSignOutEl);
+      }
+    });
+};
+
+// COMMON - POPUP
 btnSignUpInEl.addEventListener("click", () => {
   popupEl.classList.remove("hidden");
+  const formEl = createFormEl("signin");
+  popupContainerEl.insertBefore(formEl, popupHintEl);
+  listenFormEl(formEl);
 });
 
 btnPopupCloseEl.addEventListener("click", () => {
@@ -70,6 +91,11 @@ btnSwitchEl.addEventListener("click", () => {
     popupHintEl.append("還沒有帳戶？", btnSwitchEl);
   }
   popupContainerEl.insertBefore(formEl, popupHintEl);
+  listenFormEl(formEl);
+  // formEl.addEventListener("submit", (e) => {
+  //   e.preventDefault();
+  //   console.log("form submit");
+  // });
 });
 
 const createFormEl = function (type) {
@@ -77,10 +103,14 @@ const createFormEl = function (type) {
   formEl.id = type;
   const inputEmailEl = document.createElement("input");
   inputEmailEl.type = "email";
+  inputEmailEl.id = "email";
   inputEmailEl.placeholder = "輸入電子信箱";
+  inputEmailEl.required = true;
   const inputPaswordEl = document.createElement("input");
   inputPaswordEl.type = "password";
+  inputPaswordEl.id = "password";
   inputPaswordEl.placeholder = "輸入密碼";
+  inputPaswordEl.required = true;
   const btnSubmitEl = document.createElement("button");
   btnSubmitEl.type = "submit";
   formEl.append(inputEmailEl, inputPaswordEl, btnSubmitEl);
@@ -88,12 +118,47 @@ const createFormEl = function (type) {
     btnSubmitEl.innerText = "註冊新帳戶";
     const inputNameEl = document.createElement("input");
     inputNameEl.type = "text";
+    inputNameEl.id = "name";
     inputNameEl.placeholder = "輸入姓名";
+    inputNameEl.required = true;
     formEl.prepend(inputNameEl);
     return formEl;
   }
   btnSubmitEl.innerText = "登入帳戶";
   return formEl;
+};
+
+const listenFormEl = function (formEl) {
+  formEl.addEventListener("submit", (e) => {
+    e.preventDefault();
+    console.log(formEl.id);
+    if (formEl.id === "signup") {
+      fetch("/api/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formEl.querySelector("#name").value,
+          email: formEl.querySelector("#email").value,
+          password: formEl.querySelector("#password").value,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+    } else if (formEl.id === "signin") {
+      console.log(formEl.querySelector("#email").value);
+      // fetch("/api/user/auth", {
+      //   method: "PUT",
+      //   body: {
+      //     email: formEl.querySelector("#email").value,
+      //     password: formEl.querySelector("#password").value,
+      //   },
+      // })
+      //   .then((response) => response.json)
+      //   .then((data) => console.log(data));
+    }
+  });
 };
 
 // PAGE - INDEX
