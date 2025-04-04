@@ -76,7 +76,6 @@ async def post_signup(data: SignUpData):
 			mycursor=mydb.cursor()
 			mycursor.execute('INSERT INTO user (name, email, password) VALUE (%s, %s, %s)', (data.name, data.email, data.password))
 			mydb.commit()
-			print('sign up ok')
 			return {"ok": True}
 		return {"error": True, 'message': "註冊失敗，Email已被使用"}
 	except:
