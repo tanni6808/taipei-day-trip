@@ -6,6 +6,8 @@ from typing import Annotated, Optional
 import mysql.connector
 import mysql.connector.pooling
 from collections import Counter
+import jwt
+from datetime import datetime, timedelta
 
 dbconfig = {
 	'user': 'root',
@@ -82,12 +84,30 @@ async def post_signup(data: SignUpData):
 		return {"error": True, "message": "內部錯誤，無法註冊帳戶"}
 	
 @app.get('/api/user/auth')
-async def get_user():
-	return {"data": None}
+async def get_user(request: Request):
+	token=request.headers.get("Authorization").split('Bearer ')[1]
+	if token=='null':
+		return {"data": None}
+	else:
+		decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+		decode.pop('exp', None)
+		return {"data": decode}
 
 @app.put('/api/user/auth')
-async def put_signin():
-	return {"data": "signin"}
+async def put_signin(data: SignInData):
+	try: 
+		mydb=mydbpool.get_connection()
+		mycursor=mydb.cursor(dictionary=True)
+		mycursor.execute('SELECT * FROM user WHERE email = %s', (data.email, ))
+		myresult=mycursor.fetchone()
+		mycursor.close()
+		mydb.close()
+		if myresult==None or myresult["password"]!=data.password:
+			return {"error": True, "message": "帳號或密碼錯誤"}
+		encode=jwt.encode({"id": myresult["id"], "name": myresult["name"], "email": myresult["email"], "exp": datetime.now()+timedelta(days=7)}, "secret-key-tdt", algorithm="HS256")
+		return {"token": encode}
+	except:
+		return {"error": "內部錯誤，無法登入"}
 
 # ATTRACTION
 @app.get("/api/attractions", responses={500: {'model': Error}})

@@ -45,16 +45,22 @@ let sliderImgEls, sliderNavDotEls;
 
 // COMMON - SIGN IN STATUS CHECK
 window.onload = () => {
-  fetch("/api/user/auth")
+  const token = localStorage.getItem("token");
+  fetch("/api/user/auth", {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
-      if (data.data === null) {
-        console.log("not sign in");
-      } else {
-        console.log("sign in");
+      if (data.data !== null) {
         const navListEl = document.querySelector(".nav__list");
         const btnSignOutEl = document.createElement("li");
         btnSignOutEl.innerText = "登出系統";
+        btnSignOutEl.addEventListener("click", () => {
+          localStorage.removeItem("token");
+          location.reload();
+        });
         navListEl.removeChild(navListEl.lastElementChild);
         navListEl.appendChild(btnSignOutEl);
       }
@@ -64,9 +70,14 @@ window.onload = () => {
 // COMMON - POPUP
 btnSignUpInEl.addEventListener("click", () => {
   popupEl.classList.remove("hidden");
-  const formEl = createFormEl("signin");
-  popupContainerEl.insertBefore(formEl, popupHintEl);
-  listenFormEl(formEl);
+  if (popupContainerEl.querySelector("form") === null) {
+    const formEl = createFormEl("signin");
+    popupContainerEl.insertBefore(formEl, popupHintEl);
+    listenFormEl(formEl);
+  }
+  if (popupContainerEl.lastElementChild.lastElementChild === null) {
+    popupContainerEl.removeChild(popupContainerEl.lastElementChild);
+  }
 });
 
 btnPopupCloseEl.addEventListener("click", () => {
@@ -92,10 +103,9 @@ btnSwitchEl.addEventListener("click", () => {
   }
   popupContainerEl.insertBefore(formEl, popupHintEl);
   listenFormEl(formEl);
-  // formEl.addEventListener("submit", (e) => {
-  //   e.preventDefault();
-  //   console.log("form submit");
-  // });
+  if (popupContainerEl.lastElementChild.lastElementChild === null) {
+    popupContainerEl.removeChild(popupContainerEl.lastElementChild);
+  }
 });
 
 const createFormEl = function (type) {
@@ -131,7 +141,6 @@ const createFormEl = function (type) {
 const listenFormEl = function (formEl) {
   formEl.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log(formEl.id);
     if (formEl.id === "signup") {
       fetch("/api/user", {
         method: "POST",
@@ -145,20 +154,43 @@ const listenFormEl = function (formEl) {
         }),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then((data) => {
+          if (data.ok) {
+            renderPopupMessage("註冊成功！");
+          } else if (data.error) {
+            renderPopupMessage(data.message);
+          }
+        });
     } else if (formEl.id === "signin") {
-      console.log(formEl.querySelector("#email").value);
-      // fetch("/api/user/auth", {
-      //   method: "PUT",
-      //   body: {
-      //     email: formEl.querySelector("#email").value,
-      //     password: formEl.querySelector("#password").value,
-      //   },
-      // })
-      //   .then((response) => response.json)
-      //   .then((data) => console.log(data));
+      fetch("/api/user/auth", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formEl.querySelector("#email").value,
+          password: formEl.querySelector("#password").value,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (!data.error) {
+            localStorage.setItem("token", data.token);
+            location.reload();
+          } else renderPopupMessage(data.message);
+        });
     }
   });
+};
+
+const renderPopupMessage = function (message) {
+  if (popupContainerEl.lastElementChild.lastElementChild === null) {
+    popupContainerEl.removeChild(popupContainerEl.lastElementChild);
+  }
+  const popupMsgEl = document.createElement("div");
+  popupMsgEl.classList.add("hint", "bold");
+  popupMsgEl.innerText = message;
+  popupContainerEl.appendChild(popupMsgEl);
 };
 
 // PAGE - INDEX
