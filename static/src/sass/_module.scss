@@ -70,20 +70,6 @@
       height: 32px;
       width: 32px;
     }
-    & > .arrow--left {
-      margin-left: 15px;
-      background-image: url("../img/arrow-left_default.png");
-      &:hover {
-        background-image: url("../img/arrow-left_hovered.png");
-      }
-    }
-    & > .arrow--right {
-      margin-right: 15px;
-      background-image: url("../img/arrow-right_default.png");
-      &:hover {
-        background-image: url("../img/arrow-right_hovered.png");
-      }
-    }
   }
   &__list {
     list-style: none;
@@ -155,16 +141,6 @@
     cursor: pointer;
     width: 36px;
     height: 36px;
-    opacity: 0.75;
-    &:hover {
-      opacity: 1;
-    }
-    &--left {
-      background-image: url("../img/arrow-left-nb_default.png");
-    }
-    &--right {
-      background-image: url("../img/arrow-right-nb_default.png");
-    }
   }
   &__slider {
     width: 100%;
@@ -241,5 +217,73 @@
     background-color: $cyan-70;
     border-radius: 5px;
     margin-top: 10px;
+  }
+}
+
+// POPUP
+.popup {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  background-color: rgba(0, 0, 0, 0.25);
+  transition: all 0.2s;
+  &__top-border-wrap {
+    width: 340px;
+    position: absolute;
+    top: 80px;
+    left: 50vw;
+    border-radius: 5px;
+    transform: translateX(-50%);
+    background: $dark-cyan-grad;
+    padding-top: 10px;
+  }
+  &__container {
+    text-align: center;
+    width: 100%;
+    background-color: $white;
+    border-radius: 0 0 5px 5px;
+    padding: 15px;
+    border-top: 10px solid $dark-cyan-grad;
+    & > .close {
+      position: absolute;
+      top: 20px;
+      right: 10px;
+      cursor: pointer;
+    }
+    & > h3 {
+      color: $gray-70;
+    }
+    & > form {
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      & > input {
+        height: 47px;
+        margin: 5px 0;
+        border-radius: 5px;
+        border: 1px solid #cccccc;
+        padding-left: 15px;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 13.3px;
+      }
+      & > button {
+        border: none;
+        color: $white;
+        padding: 15px;
+        margin: 5px 0;
+        border-radius: 5px;
+        background-color: $cyan-70;
+      }
+    }
+    & > .hint {
+      color: $gray-70;
+      & > span {
+        cursor: pointer;
+      }
+    }
   }
 }

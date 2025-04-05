@@ -100,3 +100,34 @@ input[type="radio"] {
 .bold {
   font-weight: bold;
 }
+
+.arrow-left {
+  cursor: pointer;
+  background-image: url("../img/icon/arrow-left.png");
+  opacity: 0.75;
+  &--border {
+    background-image: url("../img/icon/arrow-left-border.png");
+    opacity: 0.5;
+  }
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.arrow-right {
+  cursor: pointer;
+  background-image: url("../img/icon/arrow-right.png");
+  opacity: 0.75;
+  &--border {
+    background-image: url("../img/icon/arrow-right-border.png");
+    opacity: 0.5;
+  }
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+}

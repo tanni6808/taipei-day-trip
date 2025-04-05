@@ -83,10 +83,10 @@ main {
       position: absolute;
       top: 46%;
       z-index: 1;
-      &--left {
+      &-left {
         left: 10px;
       }
-      &--right {
+      &-right {
         right: 10px;
       }
     }

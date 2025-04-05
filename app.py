@@ -6,6 +6,8 @@ from typing import Annotated, Optional
 import mysql.connector
 import mysql.connector.pooling
 from collections import Counter
+import jwt
+from datetime import datetime, timedelta
 
 dbconfig = {
 	'user': 'root',
@@ -21,6 +23,15 @@ mydbpool=mysql.connector.pooling.MySQLConnectionPool(
 )
 
 app=FastAPI()
+
+class SignUpData(BaseModel):
+	name: str
+	email: str
+	password: str
+
+class SignInData(BaseModel):
+	email: str
+	password: str
 
 class Attraction(BaseModel):
 	id: int
@@ -52,7 +63,56 @@ async def booking(request: Request):
 async def thankyou(request: Request):
 	return FileResponse("./static/thankyou.html", media_type="text/html")
 
+# USER
+@app.post("/api/user")
+async def post_signup(data: SignUpData):
+	try: 
+		mydb=mydbpool.get_connection()
+		mycursor=mydb.cursor()
+		mycursor.execute('SELECT*FROM user WHERE email = %s', (data.email, ))
+		myresult=mycursor.fetchall()
+		mycursor.close()
+		if myresult == []:
+			mycursor=mydb.cursor()
+			mycursor.execute('INSERT INTO user (name, email, password) VALUE (%s, %s, %s)', (data.name, data.email, data.password))
+			mydb.commit()
+			return {"ok": True}
+		return {"error": True, 'message': "註冊失敗，Email已被使用"}
+	except:
+		print('not ok')
+		return {"error": True, "message": "內部錯誤，無法註冊帳戶"}
+	
+@app.get('/api/user/auth')
+async def get_user(request: Request):
+	auth_header=request.headers.get("Authorization")
+	if auth_header==None:
+		return {"data": None}
+	else:
+		try:
+			token=auth_header.split('Bearer ')[1]
+			decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+			decode.pop('exp', None)
+			return {"data": decode}
+		except:
+			return {"data": None}
 
+@app.put('/api/user/auth')
+async def put_signin(data: SignInData):
+	try: 
+		mydb=mydbpool.get_connection()
+		mycursor=mydb.cursor(dictionary=True)
+		mycursor.execute('SELECT * FROM user WHERE email = %s', (data.email, ))
+		myresult=mycursor.fetchone()
+		mycursor.close()
+		mydb.close()
+		if myresult==None or myresult["password"]!=data.password:
+			return {"error": True, "message": "帳號或密碼錯誤"}
+		encode=jwt.encode({"id": myresult["id"], "name": myresult["name"], "email": myresult["email"], "exp": datetime.now()+timedelta(days=7)}, "secret-key-tdt", algorithm="HS256")
+		return {"token": encode}
+	except:
+		return {"error": "內部錯誤，無法登入"}
+
+# ATTRACTION
 @app.get("/api/attractions", responses={500: {'model': Error}})
 async def get_attraction(page: int, keyword: str | None=None):
 	try:
