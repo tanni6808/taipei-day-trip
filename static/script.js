@@ -46,10 +46,9 @@ let sliderImgEls, sliderNavDotEls;
 // COMMON - SIGN IN STATUS CHECK
 window.onload = () => {
   const token = localStorage.getItem("token");
+  const headers = token ? { Authorization: "Bearer " + token } : {};
   fetch("/api/user/auth", {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
+    headers,
   })
     .then((response) => response.json())
     .then((data) => {

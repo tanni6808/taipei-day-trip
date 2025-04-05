@@ -84,13 +84,17 @@ async def post_signup(data: SignUpData):
 	
 @app.get('/api/user/auth')
 async def get_user(request: Request):
-	token=request.headers.get("Authorization").split('Bearer ')[1]
-	if token=='null':
+	auth_header=request.headers.get("Authorization")
+	if auth_header==None:
 		return {"data": None}
 	else:
-		decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
-		decode.pop('exp', None)
-		return {"data": decode}
+		try:
+			token=auth_header.split('Bearer ')[1]
+			decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+			decode.pop('exp', None)
+			return {"data": decode}
+		except:
+			return {"data": None}
 
 @app.put('/api/user/auth')
 async def put_signin(data: SignInData):
