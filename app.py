@@ -45,6 +45,12 @@ class Attraction(BaseModel):
 	lng: float
 	images: list[str]
 
+class BookingData(BaseModel):
+	attractionId: int
+	date: str
+	time: str
+	price: int
+
 class Error(BaseModel):
 	error: bool
 	message: str
@@ -79,7 +85,6 @@ async def post_signup(data: SignUpData):
 			return {"ok": True}
 		return {"error": True, 'message': "註冊失敗，Email已被使用"}
 	except:
-		print('not ok')
 		return {"error": True, "message": "內部錯誤，無法註冊帳戶"}
 	
 @app.get('/api/user/auth')
@@ -158,7 +163,8 @@ async def get_attraction_by_id(attractionId: int):
 			return {"data": data}
 	except:
 		return JSONResponse(status_code=500, content={"error": True, "message": "發生內部錯誤，無法取得資料"})
-	
+
+#MRT Station
 @app.get("/api/mrts", responses={500: {'model': Error}})
 async def get_mrts():
 	try:
@@ -177,4 +183,68 @@ async def get_mrts():
 	except:
 		return JSONResponse(status_code=500, content={"error": True, "message": "發生內部錯誤，無法取得資料"})
 	
+# BOOKING
+@app.get("/api/booking", responses={403: {'model': Error}})
+async def get_booking(request: Request):
+	auth_header=request.headers.get("Authorization")
+	if auth_header==None:
+		return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法取得訂單資料"})
+	else:
+		token=auth_header.split('Bearer ')[1]
+		decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+		mydb=mydbpool.get_connection()
+		mycursor=mydb.cursor(dictionary=True)
+		mycursor.execute(' SELECT attractions.id AS attraction_id, attractions.name, attractions.address, attractions.images, booking.book_date, booking.morning FROM booking JOIN attractions ON booking.attraction_id=attractions.id WHERE user_id = %s;', (decode["id"], ))
+		myresult=mycursor.fetchone()
+		attraction_data= {"id": myresult["attraction_id"], "name": myresult["name"], "address": myresult["address"], "image": myresult["images"].split(' ')[0]}
+		time='morning' if myresult['morning']==1 else 'afternoon'
+		price=2000 if myresult['morning']==1 else 2500
+		return {"data": {"attraction": attraction_data, "date": myresult["book_date"], "time": time, "price": price}}
+	
+@app.post('/api/booking', responses={400: {'model': Error}, 403: {'model': Error}})
+async def post_booking(data: BookingData, request: Request):
+	auth_header=request.headers.get("Authorization")
+	if auth_header==None:
+		return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法新增訂單資料"})
+	else:
+		try: 
+			token=auth_header.split('Bearer ')[1]
+			decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+			mydb=mydbpool.get_connection()
+			mycursor=mydb.cursor()
+			try: 
+				mycursor.execute('SELECT*FROM booking WHERE user_id = %s', (decode["id"], ))
+				myresult=mycursor.fetchall()
+				mycursor.close()
+				if myresult != []:
+					mycursor=mydb.cursor()
+					mycursor.execute('DELETE FROM booking WHERE user_id = %s', (decode["id"], ))
+					mycursor.close()
+				morning=1 if data.time=='morning' else 0
+				mycursor=mydb.cursor()
+				mycursor.execute('INSERT INTO booking (user_id, attraction_id, book_date, morning) VALUE (%s, %s, %s, %s)', (decode['id'], data.attractionId, data.date, morning))
+				mydb.commit()
+				return {"ok": True}
+			except:
+				return JSONResponse(status_code=400, content={"error": True, "message": "資料錯誤，無法新增訂單"})
+		except:
+			return {"error": True, "message": "內部錯誤，無法新增訂單"}
+	
+@app.delete('/api/booking', responses={403: {'model': Error}})
+async def delete_booking(request: Request):
+	auth_header=request.headers.get("Authorization")
+	if auth_header==None:
+		return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法新增訂單資料"})
+	else:
+		try:
+			token=auth_header.split('Bearer ')[1]
+			decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+		except:
+			return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法新增訂單資料"})
+		mydb=mydbpool.get_connection()
+		mycursor=mydb.cursor()
+		mycursor.execute('DELETE FROM booking WHERE user_id = %s', (decode["id"], ))
+		mycursor.close()
+		return {"ok": True}
+
 app.mount("/", StaticFiles(directory="static"))
