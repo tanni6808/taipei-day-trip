@@ -39,6 +39,12 @@ h3 {
   line-height: 24px;
 }
 
+h4 {
+  font-size: 19px;
+  line-height: 24px;
+  color: #666666;
+}
+
 button {
   font-size: 19px;
   line-height: 16px;
@@ -62,18 +68,19 @@ hr {
 }
 
 @media screen and (max-width: 1200px) {
-  section > hr {
+  section > hr,
+  .container > hr {
     margin: 0 10px;
   }
 }
 
-input[type="date"] {
+input[type=date] {
   border: none;
   padding: 5px 10px;
   transform: translateY(-2px);
 }
 
-input[type="radio"] {
+input[type=radio] {
   appearance: none;
   width: 18px;
   height: 18px;
@@ -84,12 +91,18 @@ input[type="radio"] {
   margin: 0 5px;
   cursor: pointer;
 }
-input[type="radio"]:checked {
+input[type=radio]:checked {
   background-color: #448899;
 }
 
 .bold {
   font-weight: bold;
+}
+
+.caution {
+  font-weight: bold;
+  font-size: 16px;
+  color: #666666;
 }
 
 .arrow-left {
@@ -527,6 +540,106 @@ main {
   padding: 45px 0;
   line-height: 13.3px;
   color: #ffffff;
+}
+
+.container > section.booking {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.container > section.booking > div {
+  padding: 40px 10px;
+}
+.container > section.booking > h4 {
+  margin-bottom: -10px;
+}
+@media screen and (max-width: 1020px) {
+  .container > section.booking > h4 {
+    margin-left: 10px;
+  }
+}
+
+.booking__attraction {
+  display: flex;
+  gap: 30px;
+  position: relative;
+}
+.booking__attraction > #btn-delete {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  cursor: pointer;
+}
+@media screen and (max-width: 600px) {
+  .booking__attraction {
+    flex-direction: column;
+    margin-bottom: -10px;
+  }
+  .booking__attraction > #btn-delete {
+    top: unset;
+    bottom: 40px;
+  }
+}
+.booking__attraction-image {
+  width: 250px;
+  height: 200px;
+  object-fit: cover;
+}
+@media screen and (max-width: 600px) {
+  .booking__attraction-image {
+    width: 100%;
+  }
+}
+.booking__attraction-info {
+  height: 200px;
+}
+.booking__attraction-title {
+  color: #448899;
+  margin-bottom: 20px;
+}
+.booking__attraction-detail {
+  display: flex;
+  margin-bottom: 10px;
+  color: #666666;
+}
+.booking__attraction-detail--label {
+  font-weight: bold;
+  flex-shrink: 0;
+}
+.booking__user-contact-info > form, .booking__payment > form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.booking__user-contact-info > form > .form, .booking__payment > form > .form {
+  font-weight: bold;
+  color: #666666;
+}
+.booking__user-contact-info > form > .form > input, .booking__payment > form > .form > input {
+  font-size: 16px;
+  color: #000000;
+  font-weight: bold;
+  height: 38px;
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  padding: 10px;
+}
+.booking__user-contact-info > .caution {
+  margin-top: 20px;
+}
+.booking__confirm {
+  text-align: right;
+}
+.booking__confirm > .caution {
+  margin-bottom: 22px;
+}
+.booking__confirm > button {
+  color: #ffffff;
+  background-color: #448899;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */
