@@ -2,6 +2,7 @@
 
 // POPUP
 const btnSignUpInEl = document.getElementById("btn-signup-in");
+const btnBookingEl = document.getElementById("btn-booking");
 const popupEl = document.querySelector(".popup");
 const popupContainerEl = document.querySelector(".popup__container");
 const btnPopupCloseEl = document.querySelector(".popup__container>.close");
@@ -62,50 +63,68 @@ window.onload = () => {
         });
         navListEl.removeChild(navListEl.lastElementChild);
         navListEl.appendChild(btnSignOutEl);
+
+        btnBookingEl.addEventListener("click", () => {
+          window.location.href = "/booking";
+        });
+      } else {
+        btnBookingEl.addEventListener("click", () => {
+          popupEl.classList.remove("hidden");
+          if (popupContainerEl.querySelector("form") === null) {
+            const formEl = createFormEl("signin");
+            popupContainerEl.insertBefore(formEl, popupHintEl);
+            listenFormEl(formEl);
+          }
+          if (popupContainerEl.lastElementChild.lastElementChild === null) {
+            popupContainerEl.removeChild(popupContainerEl.lastElementChild);
+          }
+        });
       }
     });
 };
 
 // COMMON - POPUP
-btnSignUpInEl.addEventListener("click", () => {
-  popupEl.classList.remove("hidden");
-  if (popupContainerEl.querySelector("form") === null) {
-    const formEl = createFormEl("signin");
+if (popupEl) {
+  btnSignUpInEl.addEventListener("click", () => {
+    popupEl.classList.remove("hidden");
+    if (popupContainerEl.querySelector("form") === null) {
+      const formEl = createFormEl("signin");
+      popupContainerEl.insertBefore(formEl, popupHintEl);
+      listenFormEl(formEl);
+    }
+    if (popupContainerEl.lastElementChild.lastElementChild === null) {
+      popupContainerEl.removeChild(popupContainerEl.lastElementChild);
+    }
+  });
+
+  btnPopupCloseEl.addEventListener("click", () => {
+    popupEl.classList.add("hidden");
+  });
+
+  btnSwitchEl.addEventListener("click", () => {
+    let formEl;
+    if (popupEl.querySelector("form").id === "signin") {
+      popupEl.querySelector("h3").innerText = "註冊會員帳號";
+      popupContainerEl.removeChild(popupContainerEl.querySelector("form"));
+      formEl = createFormEl("signup");
+      btnSwitchEl.innerText = "點此登入";
+      popupHintEl.innerHTML = "";
+      popupHintEl.append("已經有帳戶了？", btnSwitchEl);
+    } else {
+      popupEl.querySelector("h3").innerText = "登入會員帳號";
+      popupContainerEl.removeChild(popupContainerEl.querySelector("form"));
+      formEl = createFormEl("signin");
+      btnSwitchEl.innerText = "點此註冊";
+      popupHintEl.innerHTML = "";
+      popupHintEl.append("還沒有帳戶？", btnSwitchEl);
+    }
     popupContainerEl.insertBefore(formEl, popupHintEl);
     listenFormEl(formEl);
-  }
-  if (popupContainerEl.lastElementChild.lastElementChild === null) {
-    popupContainerEl.removeChild(popupContainerEl.lastElementChild);
-  }
-});
-
-btnPopupCloseEl.addEventListener("click", () => {
-  popupEl.classList.add("hidden");
-});
-
-btnSwitchEl.addEventListener("click", () => {
-  let formEl;
-  if (popupEl.querySelector("form").id === "signin") {
-    popupEl.querySelector("h3").innerText = "註冊會員帳號";
-    popupContainerEl.removeChild(popupContainerEl.querySelector("form"));
-    formEl = createFormEl("signup");
-    btnSwitchEl.innerText = "點此登入";
-    popupHintEl.innerHTML = "";
-    popupHintEl.append("已經有帳戶了？", btnSwitchEl);
-  } else {
-    popupEl.querySelector("h3").innerText = "登入會員帳號";
-    popupContainerEl.removeChild(popupContainerEl.querySelector("form"));
-    formEl = createFormEl("signin");
-    btnSwitchEl.innerText = "點此註冊";
-    popupHintEl.innerHTML = "";
-    popupHintEl.append("還沒有帳戶？", btnSwitchEl);
-  }
-  popupContainerEl.insertBefore(formEl, popupHintEl);
-  listenFormEl(formEl);
-  if (popupContainerEl.lastElementChild.lastElementChild === null) {
-    popupContainerEl.removeChild(popupContainerEl.lastElementChild);
-  }
-});
+    if (popupContainerEl.lastElementChild.lastElementChild === null) {
+      popupContainerEl.removeChild(popupContainerEl.lastElementChild);
+    }
+  });
+}
 
 const createFormEl = function (type) {
   const formEl = document.createElement("form");

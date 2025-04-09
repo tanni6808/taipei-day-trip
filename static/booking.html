@@ -11,14 +11,32 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/src/css/style.css" />
+    <script>
+      (async function () {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) return (window.location.href = "/");
+          const headers = { Authorization: "Bearer " + token };
+          const response = await fetch("/api/user/auth", {
+            headers,
+          });
+          const data = await response.json();
+          if (data.data === null) return (window.location.href = "/");
+        } catch (err) {
+          console.log(err);
+          window.location.href = "/";
+        }
+      })();
+    </script>
     <script defer src="/script.js"></script>
+    <script defer src="/booking.js"></script>
   </head>
   <body>
     <nav class="nav">
       <div class="nav__container">
         <h2 class="nav__title"><a href="/">台北一日遊</a></h2>
         <ul class="nav__list">
-          <li>預定行程</li>
+          <li id="btn-booking">預定行程</li>
           <li>登出系統</li>
         </ul>
       </div>
@@ -27,38 +45,28 @@
     <main>
       <div class="container">
         <section class="booking">
-          <h4>您好，<span>使用者</span>，待預定的行程如下：</h4>
+          <h4>您好，<span id="user">使用者</span>，待預定的行程如下：</h4>
           <div class="booking__attraction">
-            <img
-              src="/src/img/test_attraction.png"
-              alt="attraction"
-              class="booking__attraction-image"
-            />
+            <img src="" alt="attraction" class="booking__attraction-image" />
             <div class="booking__attraction-info">
               <div class="booking__attraction-title bold">
-                台北一日遊：<span>景點名</span>
+                台北一日遊：<span></span>
               </div>
               <div class="booking__attraction-detail">
                 <div class="booking__attraction-detail--label">日期：</div>
-                <div class="booking__attraction-detail--date">2025-04-23</div>
+                <div class="booking__attraction-detail--date"></div>
               </div>
               <div class="booking__attraction-detail">
                 <div class="booking__attraction-detail--label">時間：</div>
-                <div class="booking__attraction-detail--time">
-                  早上9點到下午4點
-                </div>
+                <div class="booking__attraction-detail--time"></div>
               </div>
               <div class="booking__attraction-detail">
                 <div class="booking__attraction-detail--label">費用：</div>
-                <div class="booking__attraction-detail--price">
-                  新台幣2000元
-                </div>
+                <div class="booking__attraction-detail--price"></div>
               </div>
               <div class="booking__attraction-detail">
                 <div class="booking__attraction-detail--label">地點：</div>
-                <div class="booking__attraction-detail--address">
-                  地址在這裡可能會有點長
-                </div>
+                <div class="booking__attraction-detail--address"></div>
               </div>
             </div>
             <img id="btn-delete" src="/src/img/icon/delete.png" alt="delete" />
@@ -70,16 +78,16 @@
             <h4>您的聯絡資訊</h4>
             <form action="">
               <div class="form">
-                <label for="">聯絡姓名：</label>
-                <input type="text" name="" id="" />
+                <label for="contact-name">聯絡姓名：</label>
+                <input type="text" name="contact-name" id="contact-name" />
               </div>
               <div class="form">
                 <label for="">連絡信箱：</label>
-                <input type="text" name="" id="" />
+                <input type="text" name="contact-email" id="contact-email" />
               </div>
               <div class="form">
-                <label for="">手機號碼：</label>
-                <input type="text" name="" id="" />
+                <label for="phone-number">手機號碼：</label>
+                <input type="text" name="phone-number" id="phone-number" />
               </div>
             </form>
             <div class="caution">
@@ -122,16 +130,5 @@
       </div>
     </main>
     <footer class="footer">COPYRIGHT &copy; 2021 台北一日遊</footer>
-    <div class="popup hidden">
-      <div class="popup__top-border-wrap">
-        <div class="popup__container">
-          <img src="/src/img/icon/close.png" alt="close" class="close" />
-          <h3 class="bold">登入會員帳號</h3>
-          <div class="hint bold">
-            還沒有帳戶？<span id="btn-switch-signup-in">點此註冊</span>
-          </div>
-        </div>
-      </div>
-    </div>
   </body>
 </html>
