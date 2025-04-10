@@ -19,6 +19,7 @@ const bookingPriceEl = document.querySelector(
 const bookingAddressEl = document.querySelector(
   ".booking__attraction-detail--address"
 );
+const btnDeleteBooking = document.getElementById("btn-delete");
 
 const getBookingAndRender = async function () {
   const token = localStorage.getItem("token");
@@ -29,7 +30,22 @@ const getBookingAndRender = async function () {
   const userReponse = await fetch("/api/user/auth", { headers });
   const { data: bookingData } = await bookingResponse.json();
   const { data: userData } = await userReponse.json();
-  console.log(bookingData, userData);
+  if (bookingData === null) {
+    const containerEl = document.querySelector(".container");
+    while (containerEl.childNodes.length > 2) {
+      containerEl.removeChild(containerEl.lastChild);
+    }
+    const sectionEl = containerEl.querySelector("section");
+    console.log(sectionEl);
+    while (sectionEl.childNodes.length > 2) {
+      sectionEl.removeChild(sectionEl.lastChild);
+    }
+    const noBookingEl = document.createElement("div");
+    noBookingEl.innerText = "目前沒有任何待預定的行程";
+    noBookingEl.style.color = "#666666";
+    sectionEl.appendChild(noBookingEl);
+    return;
+  }
   userNameEl.innerText = userData.name;
   attractionImgEl.src = bookingData.attraction.image;
   attractionTitleEl.innerText = bookingData.attraction.name;
@@ -42,4 +58,19 @@ const getBookingAndRender = async function () {
   inputContactEmailEl.value = userData.email;
 };
 
+const deleteBooking = async function () {
+  const token = localStorage.getItem("token");
+  const headers = token ? { Authorization: "Bearer " + token } : {};
+  const response = await fetch("/api/booking", {
+    method: "DELETE",
+    headers,
+  });
+  const data = await response.json();
+  if (data.ok) {
+    window.location.href = "/booking";
+  }
+};
+
 getBookingAndRender();
+
+btnDeleteBooking.addEventListener("click", deleteBooking);

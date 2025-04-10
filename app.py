@@ -196,6 +196,8 @@ async def get_booking(request: Request):
 		mycursor=mydb.cursor(dictionary=True)
 		mycursor.execute(' SELECT attractions.id AS attraction_id, attractions.name, attractions.address, attractions.images, booking.book_date, booking.morning FROM booking JOIN attractions ON booking.attraction_id=attractions.id WHERE user_id = %s;', (decode["id"], ))
 		myresult=mycursor.fetchone()
+		if myresult==None:
+			return {"data": None}
 		attraction_data= {"id": myresult["attraction_id"], "name": myresult["name"], "address": myresult["address"], "image": myresult["images"].split(' ')[0]}
 		time='morning' if myresult['morning']==1 else 'afternoon'
 		price=2000 if myresult['morning']==1 else 2500
@@ -234,16 +236,17 @@ async def post_booking(data: BookingData, request: Request):
 async def delete_booking(request: Request):
 	auth_header=request.headers.get("Authorization")
 	if auth_header==None:
-		return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法新增訂單資料"})
+		return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法刪除訂單資料"})
 	else:
 		try:
 			token=auth_header.split('Bearer ')[1]
 			decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
 		except:
-			return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法新增訂單資料"})
+			return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法刪除訂單資料"})
 		mydb=mydbpool.get_connection()
 		mycursor=mydb.cursor()
 		mycursor.execute('DELETE FROM booking WHERE user_id = %s', (decode["id"], ))
+		mydb.commit()
 		mycursor.close()
 		return {"ok": True}
 

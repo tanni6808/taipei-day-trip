@@ -37,6 +37,9 @@ const sliderNavEl = document.querySelector(".attraction__slider-nav");
 const sessionChooseEls = document.querySelectorAll(
   ".form__radio-container.session-choose"
 );
+const formReservationEl = document.getElementById(
+  "attraction__reservation-form"
+);
 const sessionMorningEl = document.getElementById("session-morning");
 const sessionAfternoonEl = document.getElementById("session-afternoon");
 const sessionCostEl = document.getElementById("session-cost");
@@ -67,6 +70,39 @@ window.onload = () => {
         btnBookingEl.addEventListener("click", () => {
           window.location.href = "/booking";
         });
+        if (formReservationEl) {
+          formReservationEl.addEventListener("submit", (e) => {
+            e.preventDefault();
+            console.log(
+              formReservationEl.querySelector("#session-cost").innerText
+            );
+            fetch("/api/booking", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+              },
+              body: JSON.stringify({
+                attractionId: attractionID,
+                date: formReservationEl.querySelector("#date").value,
+                time:
+                  formReservationEl.querySelector("#session-morning")
+                    .checked === true
+                    ? "morning"
+                    : "afternoon",
+                price:
+                  formReservationEl.querySelector("#session-cost").innerText,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data);
+                if (data.ok) {
+                  window.location.href = "/booking";
+                }
+              });
+          });
+        }
       } else {
         btnBookingEl.addEventListener("click", () => {
           popupEl.classList.remove("hidden");
@@ -79,6 +115,20 @@ window.onload = () => {
             popupContainerEl.removeChild(popupContainerEl.lastElementChild);
           }
         });
+        if (formReservationEl) {
+          formReservationEl.addEventListener("submit", (e) => {
+            e.preventDefault();
+            popupEl.classList.remove("hidden");
+            if (popupContainerEl.querySelector("form") === null) {
+              const formEl = createFormEl("signin");
+              popupContainerEl.insertBefore(formEl, popupHintEl);
+              listenFormEl(formEl);
+            }
+            if (popupContainerEl.lastElementChild.lastElementChild === null) {
+              popupContainerEl.removeChild(popupContainerEl.lastElementChild);
+            }
+          });
+        }
       }
     });
 };
