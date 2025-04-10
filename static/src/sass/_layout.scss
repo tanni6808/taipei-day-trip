@@ -127,3 +127,101 @@ main {
   line-height: 13.3px;
   color: $white;
 }
+
+// BOOKING
+.container > section.booking {
+  max-width: 1000px;
+  margin: 0 auto;
+  & > div {
+    padding: 40px 10px;
+  }
+  & > h4 {
+    margin-bottom: -10px;
+    @media screen and (max-width: 1020px) {
+      margin-left: 10px;
+    }
+  }
+}
+
+.booking {
+  &__attraction {
+    display: flex;
+    gap: 30px;
+    position: relative;
+    & > #btn-delete {
+      position: absolute;
+      top: 40px;
+      right: 10px;
+      cursor: pointer;
+    }
+    @media screen and (max-width: 600px) {
+      flex-direction: column;
+      margin-bottom: -10px;
+      & > #btn-delete {
+        top: unset;
+        bottom: 40px;
+      }
+    }
+  }
+  &__attraction-image {
+    width: 250px;
+    height: 200px;
+    object-fit: cover;
+    @media screen and (max-width: 600px) {
+      width: 100%;
+    }
+  }
+  &__attraction-info {
+    height: 200px;
+  }
+  &__attraction-title {
+    color: $cyan-70;
+    margin-bottom: 20px;
+  }
+  &__attraction-detail {
+    display: flex;
+    margin-bottom: 10px;
+    color: $gray-70;
+    &--label {
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+  }
+  &__user-contact-info > form,
+  &__payment > form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    & > .form {
+      font-weight: bold;
+      color: $gray-70;
+      & > input {
+        font-size: 16px;
+        color: $black;
+        font-weight: bold;
+        height: 38px;
+        width: 200px;
+        border-radius: 5px;
+        border: 1px solid $gray-20;
+        padding: 10px;
+      }
+    }
+  }
+  &__user-contact-info > .caution {
+    margin-top: 20px;
+  }
+  &__confirm {
+    text-align: right;
+    & > .caution {
+      margin-bottom: 22px;
+    }
+    & > button {
+      color: $white;
+      background-color: $cyan-70;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+    }
+  }
+}

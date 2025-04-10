@@ -47,6 +47,12 @@ h3 {
   line-height: 24px;
 }
 
+h4 {
+  font-size: 19px;
+  line-height: 24px;
+  color: $gray-70;
+}
+
 button {
   font-size: 19px;
   line-height: 16px;
@@ -69,7 +75,8 @@ hr {
   background-color: $gray-20;
 }
 
-section > hr {
+section > hr,
+.container > hr {
   @media screen and (max-width: 1200px) {
     margin: 0 10px;
   }
@@ -99,6 +106,12 @@ input[type="radio"] {
 // UTILITIES
 .bold {
   font-weight: bold;
+}
+
+.caution {
+  font-weight: bold;
+  font-size: 16px;
+  color: $gray-70;
 }
 
 .arrow-left {
