@@ -78,6 +78,7 @@ async def post_signup(data: SignUpData):
 		mycursor.execute('SELECT*FROM user WHERE email = %s', (data.email, ))
 		myresult=mycursor.fetchall()
 		mycursor.close()
+		mydb.close()
 		if myresult == []:
 			mycursor=mydb.cursor()
 			mycursor.execute('INSERT INTO user (name, email, password) VALUE (%s, %s, %s)', (data.name, data.email, data.password))
@@ -196,6 +197,8 @@ async def get_booking(request: Request):
 		mycursor=mydb.cursor(dictionary=True)
 		mycursor.execute(' SELECT attractions.id AS attraction_id, attractions.name, attractions.address, attractions.images, booking.book_date, booking.morning FROM booking JOIN attractions ON booking.attraction_id=attractions.id WHERE user_id = %s;', (decode["id"], ))
 		myresult=mycursor.fetchone()
+		mycursor.close()
+		mydb.close()
 		if myresult==None:
 			return {"data": None}
 		attraction_data= {"id": myresult["attraction_id"], "name": myresult["name"], "address": myresult["address"], "image": myresult["images"].split(' ')[0]}
@@ -218,14 +221,18 @@ async def post_booking(data: BookingData, request: Request):
 				mycursor.execute('SELECT*FROM booking WHERE user_id = %s', (decode["id"], ))
 				myresult=mycursor.fetchall()
 				mycursor.close()
+				mydb.close()
 				if myresult != []:
 					mycursor=mydb.cursor()
 					mycursor.execute('DELETE FROM booking WHERE user_id = %s', (decode["id"], ))
 					mycursor.close()
+					mydb.close()
 				morning=1 if data.time=='morning' else 0
 				mycursor=mydb.cursor()
 				mycursor.execute('INSERT INTO booking (user_id, attraction_id, book_date, morning) VALUE (%s, %s, %s, %s)', (decode['id'], data.attractionId, data.date, morning))
 				mydb.commit()
+				mycursor.close()
+				mydb.close()
 				return {"ok": True}
 			except:
 				return JSONResponse(status_code=400, content={"error": True, "message": "資料錯誤，無法新增訂單"})
@@ -248,6 +255,7 @@ async def delete_booking(request: Request):
 		mycursor.execute('DELETE FROM booking WHERE user_id = %s', (decode["id"], ))
 		mydb.commit()
 		mycursor.close()
+		mydb.close()
 		return {"ok": True}
 
 app.mount("/", StaticFiles(directory="static"))
