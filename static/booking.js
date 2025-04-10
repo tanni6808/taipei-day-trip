@@ -19,6 +19,9 @@ const bookingPriceEl = document.querySelector(
 const bookingAddressEl = document.querySelector(
   ".booking__attraction-detail--address"
 );
+const bookingTotalPriceEl = document.querySelector(
+  ".booking__confirm>.caution>span"
+);
 const btnDeleteBooking = document.getElementById("btn-delete");
 
 const getBookingAndRender = async function () {
@@ -56,6 +59,7 @@ const getBookingAndRender = async function () {
   bookingAddressEl.innerText = bookingData.attraction.address;
   inputContactNameEl.value = userData.name;
   inputContactEmailEl.value = userData.email;
+  bookingTotalPriceEl.innerText = bookingData.price;
 };
 
 const deleteBooking = async function () {
