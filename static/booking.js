@@ -30,6 +30,7 @@ const getBookingAndRender = async function () {
   const userReponse = await fetch("/api/user/auth", { headers });
   const { data: bookingData } = await bookingResponse.json();
   const { data: userData } = await userReponse.json();
+  userNameEl.innerText = userData.name;
   if (bookingData === null) {
     const containerEl = document.querySelector(".container");
     while (containerEl.childNodes.length > 2) {
@@ -46,7 +47,6 @@ const getBookingAndRender = async function () {
     sectionEl.appendChild(noBookingEl);
     return;
   }
-  userNameEl.innerText = userData.name;
   attractionImgEl.src = bookingData.attraction.image;
   attractionTitleEl.innerText = bookingData.attraction.name;
   bookingDateEl.innerText = bookingData.date;
