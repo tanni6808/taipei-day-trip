@@ -221,12 +221,10 @@ async def post_booking(data: BookingData, request: Request):
 				mycursor.execute('SELECT*FROM booking WHERE user_id = %s', (decode["id"], ))
 				myresult=mycursor.fetchall()
 				mycursor.close()
-				mydb.close()
 				if myresult != []:
 					mycursor=mydb.cursor()
 					mycursor.execute('DELETE FROM booking WHERE user_id = %s', (decode["id"], ))
 					mycursor.close()
-					mydb.close()
 				morning=1 if data.time=='morning' else 0
 				mycursor=mydb.cursor()
 				mycursor.execute('INSERT INTO booking (user_id, attraction_id, book_date, morning) VALUE (%s, %s, %s, %s)', (decode['id'], data.attractionId, data.date, morning))
