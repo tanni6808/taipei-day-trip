@@ -80,6 +80,7 @@ async def post_signup(data: SignUpData):
 		mycursor.close()
 		mydb.close()
 		if myresult == []:
+			mydb=mydbpool.get_connection()
 			mycursor=mydb.cursor()
 			mycursor.execute('INSERT INTO user (name, email, password) VALUE (%s, %s, %s)', (data.name, data.email, data.password))
 			mydb.commit()
