@@ -74,13 +74,13 @@ hr {
   }
 }
 
-input[type=date] {
+input[type="date"] {
   border: none;
   padding: 5px 10px;
   transform: translateY(-2px);
 }
 
-input[type=radio] {
+input[type="radio"] {
   appearance: none;
   width: 18px;
   height: 18px;
@@ -91,7 +91,7 @@ input[type=radio] {
   margin: 0 5px;
   cursor: pointer;
 }
-input[type=radio]:checked {
+input[type="radio"]:checked {
   background-color: #448899;
 }
 
@@ -605,17 +605,24 @@ main {
   font-weight: bold;
   flex-shrink: 0;
 }
-.booking__user-contact-info > form, .booking__payment > form {
+.booking__user-contact-info > form,
+.booking__payment > form {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-.booking__user-contact-info > form > .form, .booking__payment > form > .form {
+.booking__user-contact-info > form > .form {
   font-weight: bold;
   color: #666666;
 }
-.booking__user-contact-info > form > .form > input, .booking__payment > form > .form > input {
+.booking__payment > form > .form-group {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: #666666;
+}
+.booking__user-contact-info > form > .form > input {
   font-size: 16px;
   color: #000000;
   font-weight: bold;
@@ -640,6 +647,15 @@ main {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
+}
+
+.booking__confirm > button:disabled {
+  color: #ffffff;
+  background-color: #666666;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: default;
 }
 
 /*# sourceMappingURL=style.css.map */
