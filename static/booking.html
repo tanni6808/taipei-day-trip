@@ -29,6 +29,7 @@
       })();
     </script>
     <script defer src="/script.js"></script>
+    <script defer src="https://js.tappaysdk.com/sdk/tpdirect/v5.19.2"></script>
     <script defer src="/booking.js"></script>
   </head>
   <body>
@@ -83,7 +84,7 @@
               </div>
               <div class="form">
                 <label for="">連絡信箱：</label>
-                <input type="text" name="contact-email" id="contact-email" />
+                <input type="email" name="contact-email" id="contact-email" />
               </div>
               <div class="form">
                 <label for="phone-number">手機號碼：</label>
@@ -99,23 +100,29 @@
         <section class="booking">
           <div class="booking__payment">
             <h4>信用卡付款資訊</h4>
-            <form action="">
-              <div class="form">
-                <label for="">卡片號碼：</label>
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="**** **** **** ****"
-                />
+            <!-- TapPay Field Container  -->
+            <form id="tappay">
+              <div class="form-group card-number-group">
+                <label for="card-number" class="control-label"
+                  >卡片號碼：</label
+                >
+                <div
+                  class="tpfield form-control card-number"
+                  id="card-number"
+                ></div>
               </div>
-              <div class="form">
-                <label for="">過期時間：</label>
-                <input type="text" name="" id="" placeholder="MM/YY" />
+              <div class="form-group expiration-date-group">
+                <label for="expiration-date" class="control-label"
+                  >過期時間：</label
+                >
+                <div
+                  class="tpfield form-control expiration-date"
+                  id="card-expiration-date"
+                ></div>
               </div>
-              <div class="form">
-                <label for="">驗證密碼：</label>
-                <input type="text" name="" id="" placeholder="CVV" />
+              <div class="form-group ccv-group">
+                <label for="ccv" class="control-label">驗證密碼：</label>
+                <div class="tpfield form-control ccv" id="card-ccv"></div>
               </div>
             </form>
           </div>
@@ -124,7 +131,9 @@
         <section class="booking">
           <div class="booking__confirm">
             <div class="caution">總價：新台幣<span>2000</span>元</div>
-            <button>確認訂購並付款</button>
+            <button id="btn-confirm" type="submit" form="tappay" disabled>
+              確認訂購並付款
+            </button>
           </div>
         </section>
       </div>
