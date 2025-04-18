@@ -558,6 +558,15 @@ main {
   }
 }
 
+.container > section.thankyou {
+  text-align: center;
+  color: #666666;
+}
+
+.container > section.thankyou > p {
+  padding: 20px;
+}
+
 .booking__attraction {
   display: flex;
   gap: 30px;
@@ -656,6 +665,32 @@ main {
   border: none;
   border-radius: 5px;
   cursor: default;
+}
+/* TapPay Field Container */
+.tpfield {
+  font-size: 16px;
+  color: #000000;
+  font-weight: bold;
+  height: 38px;
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  padding: 10px;
+}
+.tappay-field-focus {
+  border: 2px solid black;
+}
+.has-error > .control-label {
+  color: red !important;
+}
+.has-error > .form-control {
+  border: 1px solid red !important;
+}
+.has-success > .control-label {
+  color: green !important;
+}
+.has-success > .form-control {
+  border: 1px solid green !important;
 }
 
 /*# sourceMappingURL=style.css.map */

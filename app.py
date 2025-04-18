@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 import mysql.connector
 import mysql.connector.pooling
 from collections import Counter
-import jwt
+import jwt, requests, json
 from datetime import datetime, timedelta
 
 dbconfig = {
@@ -21,6 +21,14 @@ mydbpool=mysql.connector.pooling.MySQLConnectionPool(
 	pool_size=10,
 	**dbconfig
 )
+
+def generate_order_number(user_id: int) -> str:
+	now=datetime.now()
+	date_str = now.strftime('%Y%m%d')
+	timestamp_suffix = str(int(now.timestamp()*1000))[-5:]
+	user_code = f"U{user_id:05d}"
+	order_number = f"ORD{date_str}-{timestamp_suffix}{user_code}"
+	return order_number
 
 app=FastAPI()
 
@@ -50,6 +58,31 @@ class BookingData(BaseModel):
 	date: str
 	time: str
 	price: int
+
+class AttractionGeneral(BaseModel):
+	id: int
+	name: str
+	address: str
+	image: str
+
+class Trip(BaseModel):
+	attraction: AttractionGeneral
+	date: str
+	time: str
+
+class Contact(BaseModel):
+	name: str
+	email: str
+	phone: str
+
+class Order(BaseModel):
+	price: int
+	trip: Trip
+	contact: Contact
+
+class OrderData(BaseModel):
+	prime: str
+	order: Order
 
 class Error(BaseModel):
 	error: bool
@@ -195,7 +228,7 @@ async def get_booking(request: Request):
 		decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
 		mydb=mydbpool.get_connection()
 		mycursor=mydb.cursor(dictionary=True)
-		mycursor.execute(' SELECT attractions.id AS attraction_id, attractions.name, attractions.address, attractions.images, booking.book_date, booking.morning FROM booking JOIN attractions ON booking.attraction_id=attractions.id WHERE user_id = %s;', (decode["id"], ))
+		mycursor.execute('SELECT attractions.id AS attraction_id, attractions.name, attractions.address, attractions.images, booking.book_date, booking.morning FROM booking JOIN attractions ON booking.attraction_id=attractions.id WHERE user_id = %s;', (decode["id"], ))
 		myresult=mycursor.fetchone()
 		mycursor.close()
 		mydb.close()
@@ -224,6 +257,7 @@ async def post_booking(data: BookingData, request: Request):
 				if myresult != []:
 					mycursor=mydb.cursor()
 					mycursor.execute('DELETE FROM booking WHERE user_id = %s', (decode["id"], ))
+					mydb.commit()
 					mycursor.close()
 				morning=1 if data.time=='morning' else 0
 				mycursor=mydb.cursor()
@@ -255,5 +289,92 @@ async def delete_booking(request: Request):
 		mycursor.close()
 		mydb.close()
 		return {"ok": True}
+	
+
+# ORDER 
+@app.post('/api/orders', responses={400: {'model': Error}, 403: {'model': Error}, 500: {'model': Error}})
+async def post_orders(data: OrderData, request: Request):
+	try:
+		auth_header=request.headers.get("Authorization")
+		if auth_header==None:
+			return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法進行訂購"})
+		else:
+			try: 
+				token=auth_header.split('Bearer ')[1]
+				decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+			except:
+				return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法進行訂購"})
+			try: 
+				morning=1 if data.order.trip.time=='morning' else 0
+				order_number = generate_order_number(decode['id'])
+				mydb=mydbpool.get_connection()
+				mycursor=mydb.cursor()
+				mycursor.execute('INSERT INTO orders (user_id, attraction_id, price, book_date, morning, contact_name, contact_email, contact_phone, order_number) VALUE (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (decode['id'], data.order.trip.attraction.id, data.order.price, data.order.trip.date, morning, data.order.contact.name, data.order.contact.email, data.order.contact.phone, order_number))
+				mydb.commit()
+				mycursor.execute('DELETE FROM booking WHERE user_id = %s', (decode["id"], ))
+				mydb.commit()
+				mycursor.close()
+				mydb.close()
+				partner_key = 'partner_jA6jWYh2Ewn3v1g0y4dlAhQquwOIZO0nULriaW1x5wXVDwqrrkqBuLLS'
+				tappay_header = {"Content-Type": "application/json", "x-api-key": partner_key}
+				tappay_data = {
+					"prime": data.prime,
+					"partner_key": partner_key,
+					"merchant_id": "tanniY521_CTBC",
+					"details":"TapPay Test",
+					"amount": data.order.price,
+					"cardholder": {
+						"phone_number": "+886923456789",
+						"name": "王小明",
+						"email": "LittleMing@Wang.com",
+						"zip_code": "100",
+						"address": "台北市天龍區芝麻街1號1樓",
+						"national_id": "A123456789"
+					},
+					"remember": False
+				}
+				tappay_response=requests.post('https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime', headers=tappay_header, json=tappay_data)
+				tappay_response_data=tappay_response.json()
+				tappay_response_data_json_str=json.dumps(tappay_response_data, ensure_ascii=False)
+				mydb=mydbpool.get_connection()
+				mycursor=mydb.cursor()
+				mycursor.execute('INSERT INTO payment_log (order_number, status_code, details) VALUE (%s, %s, %s)', (order_number, tappay_response_data['status'], tappay_response_data_json_str))
+				mydb.commit()
+				if tappay_response_data['status']==0:
+					mycursor.execute('UPDATE orders SET paid=1 WHERE order_number=%s', (order_number, ))
+					mydb.commit()
+					response_message = '付款成功'
+				else:
+					response_message = '付款失敗'
+				mycursor.close()
+				mydb.close()
+				return {'data': {"number": order_number, 'payment': {"status": tappay_response_data['status'], 'message': response_message}}}
+			except:
+				return JSONResponse(status_code=400, content={"error": True, "message": "資料錯誤，無法進行訂購"})
+	except:
+		return JSONResponse(status_code=500, content={"error": True, "message": "內部錯誤，無法進行訂購"})
+
+@app.get('/api/order/{orderNumber}')
+async def get_order(orderNumber: str, request: Request):
+	auth_header=request.headers.get("Authorization")
+	if auth_header==None:
+		return JSONResponse(status_code=403, content={"error": True, "message": "未登入"})
+	else:
+		try:
+			token=auth_header.split('Bearer ')[1]
+			decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+		except:
+			return JSONResponse(status_code=403, content={"error": True, "message": "未登入"})
+		mydb=mydbpool.get_connection()
+		mycursor=mydb.cursor(dictionary=True)
+		mycursor.execute("SELECT orders.order_number, orders.price, orders.attraction_id, attractions.name, attractions.address, attractions.images, orders.book_date, orders.morning, orders.contact_name, orders.contact_email, orders.contact_phone, orders.paid FROM orders JOIN attractions ON orders.attraction_id=attractions.id WHERE order_number=%s", (orderNumber, ))
+		result=mycursor.fetchone()
+		print(result)
+		data={"number":result['order_number'], "price": result['price'], "trip": {"attraction": {"id":result['attraction_id'], 'name':result['name'], 'address': result['address'], 'image': result['images'].split(' ')[0]}, "date": result['book_date'], "time": 'morning' if result['morning']==1 else 'afternoon'}, "contact": {"name":result['contact_name'], 'email': result['contact_email'], 'phone': result['contact_phone']}, 'status': result['paid']}
+		mycursor.close()
+		mydb.close()
+		return {"data": data}
+	
+# SELECT attractions.id AS attraction_id, attractions.name, attractions.address, attractions.images, booking.book_date, booking.morning FROM booking JOIN attractions ON booking.attraction_id=attractions.id WHERE user_id = %s;', (decode["id"], )
 
 app.mount("/", StaticFiles(directory="static"))
