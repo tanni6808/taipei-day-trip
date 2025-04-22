@@ -1,12 +1,6 @@
 "use strict";
 
-const btnBookingEl = document.getElementById("btn-booking");
-const popupEl = document.querySelector(".popup");
-const attractionsEl = document.querySelector(".attractions");
 const footerEl = document.querySelector(".footer");
-const searchFormEl = document.getElementById("search");
-const searchInputEl = document.querySelector(".search__input");
-const navListEl = document.querySelector(".nav__list");
 
 // Model
 const accountModel = {
@@ -84,17 +78,19 @@ const attractionModel = {
 
 // View
 const navView = {
+  navListEl: document.querySelector(".nav__list"),
   btnSignUpInEl: null,
   btnSignOutEl: null,
+  btnBookingEl: document.getElementById("btn-booking"),
   renderSignUpInBtn() {
     this.btnSignUpInEl = document.createElement("li");
     this.btnSignUpInEl.innerText = "登入/註冊";
-    navListEl.appendChild(this.btnSignUpInEl);
+    this.navListEl.appendChild(this.btnSignUpInEl);
   },
   renderSignoutBtn() {
     this.btnSignOutEl = document.createElement("li");
     this.btnSignOutEl.innerText = "登出系統";
-    navListEl.appendChild(this.btnSignOutEl);
+    this.navListEl.appendChild(this.btnSignOutEl);
   },
   bindBtnSignUpInClick(handler) {
     this.btnSignUpInEl.addEventListener("click", handler);
@@ -103,22 +99,23 @@ const navView = {
     this.btnSignOutEl.addEventListener("click", handler);
   },
   bindBtnBookingClick(handler) {
-    btnBookingEl.addEventListener("click", handler);
+    this.btnBookingEl.addEventListener("click", handler);
   },
 };
 
 const popupView = {
-  formEl: null,
-  btnCloseEl: document.querySelector(".popup__container>.close"),
+  popupEl: document.querySelector(".popup"),
   containerEl: document.querySelector(".popup__container"),
+  btnCloseEl: document.querySelector(".popup__container>.close"),
   titleEl: document.querySelector(".popup__container>h3"),
-  hintEl: document.querySelector(".popup__container>.hint"),
+  formEl: null,
   btnSwitchEl: document.getElementById("btn-switch-signup-in"),
+  hintEl: document.querySelector(".popup__container>.hint"),
   showPopup() {
-    popupEl.classList.remove("hidden");
+    this.popupEl.classList.remove("hidden");
   },
   closePopup() {
-    popupEl.classList.add("hidden");
+    this.popupEl.classList.add("hidden");
   },
   createForm(formType) {
     const formEl = document.createElement("form");
@@ -196,19 +193,21 @@ const popupView = {
 };
 
 const searchFormView = {
+  searchFormEl: document.getElementById("search"),
+  searchInputEl: document.querySelector(".search__input"),
   getKeyword() {
-    return searchInputEl.value;
+    return this.searchInputEl.value;
   },
   setKeyword(keyword) {
-    searchInputEl.value = keyword;
+    this.searchInputEl.value = keyword;
   },
   clearKeyword() {
-    searchInputEl.value = "";
+    this.searchInputEl.value = "";
   },
   bindSearchFormSubmit(handler) {
-    searchFormEl.addEventListener("submit", (e) => {
+    this.searchFormEl.addEventListener("submit", (e) => {
       e.preventDefault();
-      handler(searchInputEl.value);
+      handler(this.searchInputEl.value);
     });
   },
 };
@@ -247,6 +246,7 @@ const mrtView = {
 };
 
 const attractionView = {
+  attractionsEl: document.querySelector(".attractions"),
   renderAttractionCards(attractionList) {
     attractionList.forEach((attraction) => {
       const aCardEl = document.createElement("a");
@@ -267,14 +267,14 @@ const attractionView = {
       aDetailCategoryEl.innerText = attraction.category;
       aDetailEl.append(aDetailMrtEl, aDetailCategoryEl);
       aCardEl.append(aImgEl, aDetailEl);
-      attractionsEl.appendChild(aCardEl);
+      this.attractionsEl.appendChild(aCardEl);
     });
   },
   renderErrorMessage(message) {
-    attractionsEl.innerText = message;
+    this.attractionsEl.innerText = message;
   },
   clearAttractionCards() {
-    attractionsEl.innerHTML = "";
+    this.attractionsEl.innerHTML = "";
   },
 };
 
@@ -285,7 +285,7 @@ const navController = {
     if (userStatus.data === null) {
       navView.renderSignUpInBtn();
       navView.bindBtnSignUpInClick(this.handleBtnSignUpInClick);
-      navView.bindBtnBookingClick(popupView.showPopup);
+      navView.bindBtnBookingClick(this.handleBtnBookingClick);
     } else {
       navView.renderSignoutBtn();
       navView.bindBtnSignOutClick(this.handleBtnSignOutClick);
@@ -300,6 +300,9 @@ const navController = {
   handleBtnSignOutClick() {
     localStorage.removeItem("token");
     location.reload();
+  },
+  handleBtnBookingClick() {
+    popupView.showPopup();
   },
 };
 const popupController = {

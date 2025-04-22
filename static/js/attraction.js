@@ -361,7 +361,286 @@ if (sessionChooseEls.length > 0) {
 }
 
 // Model
+const accountModel = {
+  async fetchSignUp(formEl) {
+    const response = await fetch("/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: formEl.querySelector("#name").value,
+        email: formEl.querySelector("#email").value,
+        password: formEl.querySelector("#password").value,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  },
+  async fetchSignIn(formEl) {
+    const response = await fetch("/api/user/auth", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: formEl.querySelector("#email").value,
+        password: formEl.querySelector("#password").value,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  },
+};
 
-// Controller
+const userStatusModel = {
+  async fetchUserStatus() {
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: "Bearer " + token } : {};
+    const response = await fetch("/api/user/auth", {
+      headers,
+    });
+    return response.json();
+  },
+};
+
+const attractionModel = {
+  async fetchAttraction(id) {},
+};
 
 // View
+const navView = {
+  navListEl: document.querySelector(".nav__list"),
+  btnSignUpInEl: null,
+  btnSignOutEl: null,
+  btnBookingEl: document.getElementById("btn-booking"),
+  renderSignUpInBtn() {
+    this.btnSignUpInEl = document.createElement("li");
+    this.btnSignUpInEl.innerText = "登入/註冊";
+    this.navListEl.appendChild(this.btnSignUpInEl);
+  },
+  renderSignoutBtn() {
+    this.btnSignOutEl = document.createElement("li");
+    this.btnSignOutEl.innerText = "登出系統";
+    this.navListEl.appendChild(this.btnSignOutEl);
+  },
+  bindBtnSignUpInClick(handler) {
+    this.btnSignUpInEl.addEventListener("click", handler);
+  },
+  bindBtnSignOutClick(handler) {
+    this.btnSignOutEl.addEventListener("click", handler);
+  },
+  bindBtnBookingClick(handler) {
+    this.btnBookingEl.addEventListener("click", handler);
+  },
+};
+
+const popupView = {
+  popupEl: document.querySelector(".popup"),
+  containerEl: document.querySelector(".popup__container"),
+  btnCloseEl: document.querySelector(".popup__container>.close"),
+  titleEl: document.querySelector(".popup__container>h3"),
+  formEl: null,
+  btnSwitchEl: document.getElementById("btn-switch-signup-in"),
+  hintEl: document.querySelector(".popup__container>.hint"),
+  showPopup() {
+    this.popupEl.classList.remove("hidden");
+  },
+  closePopup() {
+    this.popupEl.classList.add("hidden");
+  },
+  createForm(formType) {
+    const formEl = document.createElement("form");
+    formEl.id = formType;
+    const inputEmailEl = document.createElement("input");
+    inputEmailEl.type = "email";
+    inputEmailEl.id = "email";
+    inputEmailEl.placeholder = "輸入電子信箱";
+    inputEmailEl.required = true;
+    const inputPaswordEl = document.createElement("input");
+    inputPaswordEl.type = "password";
+    inputPaswordEl.id = "password";
+    inputPaswordEl.placeholder = "輸入密碼";
+    inputPaswordEl.required = true;
+    const btnSubmitEl = document.createElement("button");
+    btnSubmitEl.type = "submit";
+    formEl.append(inputEmailEl, inputPaswordEl, btnSubmitEl);
+    if (formType === "signup") {
+      this.titleEl.innerText = "註冊會員帳號";
+      btnSubmitEl.innerText = "註冊新帳戶";
+      const inputNameEl = document.createElement("input");
+      inputNameEl.type = "text";
+      inputNameEl.id = "name";
+      inputNameEl.placeholder = "輸入姓名";
+      inputNameEl.required = true;
+      formEl.prepend(inputNameEl);
+      this.formEl = formEl;
+      return;
+    }
+    this.titleEl.innerText = "登入會員帳號";
+    btnSubmitEl.innerText = "登入帳戶";
+    this.formEl = formEl;
+  },
+  renderForm() {
+    if (this.containerEl.querySelector("form") !== null) {
+      this.containerEl.removeChild(this.containerEl.querySelector("form"));
+    }
+    this.containerEl.insertBefore(this.formEl, this.hintEl);
+  },
+  changeDefaultHint() {
+    this.hintEl.innerHTML = "";
+    const formType = this.formEl.id;
+    if (formType === "signup") {
+      this.btnSwitchEl.innerText = "點此登入";
+      this.hintEl.append("已經有帳戶了？", this.btnSwitchEl);
+    } else {
+      this.btnSwitchEl.innerText = "點此註冊";
+      this.hintEl.append("還沒有帳戶？", this.btnSwitchEl);
+    }
+  },
+  renderNewHint(message) {
+    this.clearNewHint();
+    const newHintEl = document.createElement("div");
+    newHintEl.classList.add("hint", "bold");
+    newHintEl.innerText = message;
+    this.containerEl.appendChild(newHintEl);
+  },
+  clearNewHint() {
+    if (this.containerEl.lastElementChild.lastElementChild === null) {
+      this.containerEl.removeChild(this.containerEl.lastElementChild);
+    }
+  },
+  bindBtnCloseClick(handler) {
+    this.btnCloseEl.addEventListener("click", handler);
+  },
+  bindBtnSwitchClick(handler) {
+    this.btnSwitchEl.addEventListener("click", handler);
+  },
+  bindFormSubmit(handler) {
+    this.formEl.addEventListener("submit", (e) => {
+      e.preventDefault();
+      handler();
+    });
+  },
+};
+
+const searchFormView = {
+  searchFormEl: document.getElementById("search"),
+  searchInputEl: document.querySelector(".search__input"),
+  getKeyword() {
+    return this.searchInputEl.value;
+  },
+  setKeyword(keyword) {
+    this.searchInputEl.value = keyword;
+  },
+  clearKeyword() {
+    this.searchInputEl.value = "";
+  },
+  bindSearchFormSubmit(handler) {
+    this.searchFormEl.addEventListener("submit", (e) => {
+      e.preventDefault();
+      handler(this.searchInputEl.value);
+    });
+  },
+};
+
+const imageSliderView = {
+  renderSlider() {},
+  renderNavDots() {},
+  renderBtnPrevNext() {},
+};
+
+const attractionDetailView = {
+  renderAttractionDetail() {},
+};
+
+// Controller
+const navController = {
+  async init() {
+    const userStatus = await userStatusModel.fetchUserStatus();
+    if (userStatus.data === null) {
+      navView.renderSignUpInBtn();
+      navView.bindBtnSignUpInClick(this.handleBtnSignUpInClick);
+      navView.bindBtnBookingClick(this.handleBtnBookingClick);
+    } else {
+      navView.renderSignoutBtn();
+      navView.bindBtnSignOutClick(this.handleBtnSignOutClick);
+      navView.bindBtnBookingClick(function () {
+        window.location.href = "/booking";
+      });
+    }
+  },
+  handleBtnSignUpInClick() {
+    popupView.showPopup();
+  },
+  handleBtnSignOutClick() {
+    localStorage.removeItem("token");
+    location.reload();
+  },
+  handleBtnBookingClick() {
+    popupView.showPopup();
+  },
+};
+const popupController = {
+  init() {
+    popupView.bindBtnCloseClick(this.handleBtnCloseClick);
+    popupView.createForm("signin");
+    popupView.renderForm();
+    popupView.bindBtnSwitchClick(this.handleBtnSwitchClick);
+    popupView.bindFormSubmit(this.handleFormSubmit);
+  },
+  handleBtnCloseClick() {
+    popupView.closePopup();
+  },
+  handleBtnSwitchClick() {
+    popupView.clearNewHint();
+    if (popupView.formEl.id === "signup") {
+      popupView.createForm("signin");
+      popupView.renderForm();
+    } else {
+      popupView.createForm("signup");
+      popupView.renderForm();
+    }
+    popupView.changeDefaultHint();
+    popupView.bindFormSubmit(popupController.handleFormSubmit);
+  },
+  async handleFormSubmit() {
+    if (popupView.formEl.id === "signup") {
+      const result = await accountModel.fetchSignUp(popupView.formEl);
+      if (result.ok) {
+        popupView.renderNewHint("註冊成功！");
+      } else if (result.error) {
+        popupView.renderNewHint(result.message);
+      }
+    } else {
+      const result = await accountModel.fetchSignIn(popupView.formEl);
+      if (!result.error) {
+        localStorage.setItem("token", result.token);
+        location.reload();
+      } else {
+        popupView.renderNewHint(result.message);
+      }
+    }
+  },
+};
+
+const mrtBarController = {
+  async init() {
+    try {
+      const mrtList = await mrtModel.fetchMrtList();
+      mrtView.renderMrtBar(mrtList);
+    } catch (err) {
+      handleError(err);
+    }
+    mrtView.bindBtnLClick(mrtView.leftScrollMrtBar);
+    mrtView.bindBtnRClick(mrtView.rightScrollMrtBar);
+    mrtView.bindMrtLiClick(this.handleMrtLiClick);
+  },
+  handleMrtLiClick(clickedMrtLiEl) {
+    searchFormView.setKeyword(clickedMrtLiEl);
+    attractionSectionController.handleSearchFormSubmit(clickedMrtLiEl);
+  },
+};
+
+navController.init();
+popupController.init();
