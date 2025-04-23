@@ -4,6 +4,7 @@ const footerEl = document.querySelector(".footer");
 
 // Model
 const accountModel = {
+  //done
   async fetchSignUp(formEl) {
     const response = await fetch("/api/user", {
       method: "POST",
@@ -36,16 +37,19 @@ const accountModel = {
 };
 
 const userStatusModel = {
+  //done
   async fetchUserStatus() {
     const token = localStorage.getItem("token");
     const headers = token ? { Authorization: "Bearer " + token } : {};
     const response = await fetch("/api/user/auth", {
       headers,
     });
-    return response.json();
+    const data = response.json();
+    return data.data;
   },
 };
 const mrtModel = {
+  //done
   async fetchMrtList() {
     try {
       const response = await fetch("/api/mrts");
@@ -59,6 +63,7 @@ const mrtModel = {
   },
 };
 const attractionModel = {
+  //done
   async fetchAttractionData(page, keyword = "") {
     const url =
       keyword === ""
