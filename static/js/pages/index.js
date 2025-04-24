@@ -1,5 +1,5 @@
 import {
-  controlUserState,
+  loadUserState,
   controlRenderMrtBar,
   controlMrtBarScrollToLeft,
   controlMrtBarScrollToRight,
@@ -20,7 +20,7 @@ import searchFormView from "../views/searchFormView.js";
 import popupView from "../views/popupView.js";
 
 const init = async function () {
-  await controlUserState();
+  await loadUserState();
   navView.addHandlerRender(controlRenderNav);
   navView.addHandlerClickNavLiEl(controlNavAction);
   mrtBarView.addHandlerRender(controlRenderMrtBar);

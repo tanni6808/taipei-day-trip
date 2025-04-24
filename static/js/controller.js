@@ -4,8 +4,9 @@ import searchFormView from "./views/searchFormView.js";
 import mrtBarView from "./views/mrtBarView.js";
 import indexAttractionView from "./views/indexAttractionView.js";
 import popupView from "./views/popupView.js";
+import attractionGalleryView from "./views/attractionGalleryView.js";
 
-export const controlUserState = async function () {
+export const loadUserState = async function () {
   try {
     const member = await model.getUserStatus();
     if (member === null) return;
@@ -99,3 +100,16 @@ export const controlSubmitPopupForm = async function (formId) {
 export const controlClosePopup = function () {
   popupView.hidePopup();
 };
+
+export const loadAttractionPageDetail = async function () {
+  const pathParts = window.location.pathname.split("/");
+  const attractionId = pathParts[pathParts.length - 1];
+  const data = await model.getAttrationDetail(attractionId);
+  model.state.attractionPageDetail = data.data;
+};
+
+export const controlRenderAttractionPageDetail = function () {
+  attractionGalleryView.render(model.state.attractionPageDetail);
+};
+
+export const controlSliderChange = function (index) {};

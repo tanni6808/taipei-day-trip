@@ -6,6 +6,7 @@ export const state = {
     nextPage: 0,
     keyword: "",
   },
+  attractionPageDetail: {},
 };
 
 // GET
@@ -51,6 +52,13 @@ export const getAttractionList = async function (page, keyword = "") {
     console.error(`Model error: ${err}`);
     throw err;
   }
+};
+
+// Attraction Page Info
+export const getAttrationDetail = async function (attractionId) {
+  const response = await fetch(`/api/attraction/${attractionId}`);
+  const data = await response.json();
+  return data;
 };
 
 // SEND
