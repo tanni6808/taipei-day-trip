@@ -17,6 +17,6 @@ export default class View {
   }
 
   addHandlerRender(handler) {
-    window.addEventListener("load", handler);
+    handler();
   }
 }

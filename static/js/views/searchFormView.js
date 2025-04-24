@@ -16,8 +16,8 @@ class SearchFormView {
 
   addHandlerSearch(handler) {
     this.parentElement.addEventListener("submit", (e) => {
-      e.preventDefault;
-      handler();
+      e.preventDefault();
+      handler(this.getKeyword());
     });
   }
 }

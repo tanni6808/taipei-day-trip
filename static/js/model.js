@@ -15,7 +15,8 @@ export const getUserStatus = async function () {
   const headers = token ? { Authorization: "Bearer " + token } : {};
   try {
     const response = await fetch("/api/user/auth", { headers });
-    return response.json();
+    const data = await response.json();
+    return data.data;
   } catch (err) {
     console.error(`Model error: ${err}`);
     throw err;
@@ -71,7 +72,7 @@ export const sendAccountSignUp = async function (formEl) {
     if (data.error) throw new Error(data.message);
     return data;
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     throw err;
   }
 };
@@ -90,9 +91,10 @@ export const sendAccountSignIn = async function (formEl) {
     });
     const data = await response.json();
     if (data.error) throw new Error(data.message);
+    localStorage.setItem("token", data.token);
     return data;
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     throw err;
   }
 };
