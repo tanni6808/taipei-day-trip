@@ -7,6 +7,7 @@ import popupView from "./views/popupView.js";
 import attractionGalleryView from "./views/attractionGalleryView.js";
 import attractionReservationInfoView from "./views/attractionReservationInfoView.js";
 import attractionBodyView from "./views/attractionBodyView.js";
+import bookingView from "./views/bookingView.js";
 
 export const loadUserState = async function () {
   try {
@@ -19,13 +20,7 @@ export const loadUserState = async function () {
   }
 };
 
-export const controlRenderNav = function () {
-  if (!model.state.signIn) navView.renderNavForGuest();
-  else {
-    navView.renderNavForMember();
-  }
-};
-
+// INDEX
 export const controlRenderIndexAttraction = async function () {
   const attractionSearch = model.state.attractionSearch;
   if (attractionSearch.nextPage === null) return;
@@ -61,48 +56,7 @@ export const controlRenderSearchResult = async function (input) {
   controlRenderIndexAttraction();
 };
 
-export const controlNavAction = function (clickBtnId) {
-  if (clickBtnId === "btn-booking") {
-    if (!model.state.signIn) popupView.showPopup();
-    else window.location.href = "/booking";
-  } else if (clickBtnId === "btn-signup-in") {
-    popupView.showPopup();
-  } else {
-    localStorage.removeItem("token");
-    location.reload();
-  }
-};
-
-export const controlRenderForm = function () {
-  popupView.generateFormEl("signup");
-  popupView.renderFormEl();
-};
-
-export const controlSwitchPopupForm = function () {
-  popupView.removeFormEl();
-  if (popupView.formEl.id === "signup") popupView.generateFormEl("signin");
-  else popupView.generateFormEl("signup");
-  popupView.renderFormEl();
-};
-
-export const controlSubmitPopupForm = async function (formId) {
-  try {
-    if (formId === "signup") {
-      const response = await model.sendAccountSignUp(popupView.formEl);
-      if (!response.error) popupView.renderNewHint("註冊成功！");
-    } else {
-      const response = await model.sendAccountSignIn(popupView.formEl);
-      if (!response.error) location.reload();
-    }
-  } catch (err) {
-    popupView.renderNewHint(err);
-  }
-};
-
-export const controlClosePopup = function () {
-  popupView.hidePopup();
-};
-
+// ATTRACTION
 export const loadAttractionPageDetail = async function () {
   const pathParts = window.location.pathname.split("/");
   const attractionId = pathParts[pathParts.length - 1];
@@ -147,4 +101,82 @@ export const controlSliderResize = function () {
 export const controlTimeRadioCheck = function (id) {
   attractionReservationInfoView.checkTime(id);
   attractionReservationInfoView.changePrice(id);
+};
+
+export const controlSubmitReservationForm = async function (formEl) {
+  if (!model.state.signIn) {
+    return popupView.showPopup();
+  }
+  try {
+    const result = await model.sendAddBooking(formEl);
+    if (result.ok) window.location.href = "/booking";
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// BOOKING
+// export const controlMemberPageAccess = function () {
+//   if (!model.state.signIn) {
+//     alert("請先登入!");
+//     window.location.href = "/";
+//   } else return;
+// };
+
+export const controlRenderBooking = async function () {
+  const bookingData = await model.getBooking();
+  bookingView.render({
+    bookingData: bookingData,
+    userData: model.state.account,
+  });
+};
+
+// COMMON
+export const controlRenderNav = function () {
+  if (!model.state.signIn) navView.renderNavForGuest();
+  else {
+    navView.renderNavForMember();
+  }
+};
+
+export const controlNavAction = function (clickBtnId) {
+  if (clickBtnId === "btn-booking") {
+    if (!model.state.signIn) popupView.showPopup();
+    else window.location.href = "/booking";
+  } else if (clickBtnId === "btn-signup-in") {
+    popupView.showPopup();
+  } else {
+    localStorage.removeItem("token");
+    location.reload();
+  }
+};
+
+export const controlRenderForm = function () {
+  popupView.generateFormEl("signup");
+  popupView.renderFormEl();
+};
+
+export const controlSwitchPopupForm = function () {
+  popupView.removeFormEl();
+  if (popupView.formEl.id === "signup") popupView.generateFormEl("signin");
+  else popupView.generateFormEl("signup");
+  popupView.renderFormEl();
+};
+
+export const controlSubmitPopupForm = async function (formId) {
+  try {
+    if (formId === "signup") {
+      const response = await model.sendAccountSignUp(popupView.formEl);
+      if (!response.error) popupView.renderNewHint("註冊成功！");
+    } else {
+      const response = await model.sendAccountSignIn(popupView.formEl);
+      if (!response.error) location.reload();
+    }
+  } catch (err) {
+    popupView.renderNewHint(err);
+  }
+};
+
+export const controlClosePopup = function () {
+  popupView.hidePopup();
 };

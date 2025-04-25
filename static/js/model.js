@@ -62,6 +62,17 @@ export const getAttrationDetail = async function (attractionId) {
   return data;
 };
 
+// BOOKING
+export const getBooking = async function () {
+  const token = localStorage.getItem("token");
+  const headers = token ? { Authorization: "Bearer " + token } : {};
+  const response = await fetch("/api/booking", {
+    headers,
+  });
+  const data = await response.json();
+  return data.data;
+};
+
 // SEND
 // Account
 export const sendAccountSignUp = async function (formEl) {
@@ -104,6 +115,34 @@ export const sendAccountSignIn = async function (formEl) {
     return data;
   } catch (err) {
     // console.error(err);
+    throw err;
+  }
+};
+
+// Make Booking
+export const sendAddBooking = async function (formEl) {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch("/api/booking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        attractionId: state.attractionPageDetail.id,
+        date: formEl.querySelector("#date").value,
+        time:
+          formEl.querySelector("#session-morning").checked === true
+            ? "morning"
+            : "afternoon",
+        price: formEl.querySelector("#session-cost").innerText,
+      }),
+    });
+    const result = response.json();
+    if (result.error) throw new Error(result.message);
+    return result;
+  } catch (err) {
     throw err;
   }
 };

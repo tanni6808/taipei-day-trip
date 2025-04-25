@@ -13,6 +13,13 @@ class AttractionReservationInfoView extends View {
     });
   }
 
+  addHandlerSubmitForm(handler) {
+    this.parentElement.addEventListener("submit", (e) => {
+      e.preventDefault();
+      handler(e.target);
+    });
+  }
+
   checkTime(id) {
     this.parentElement.querySelector(`#${id}`).checked = true;
   }

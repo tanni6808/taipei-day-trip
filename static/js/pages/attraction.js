@@ -14,6 +14,7 @@ import {
   controlRenderAttractionPageResInfo,
   controlTimeRadioCheck,
   controlRenderAttractionBody,
+  controlSubmitReservationForm,
 } from "../controller.js";
 import navView from "../views/navView.js";
 import popupView from "../views/popupView.js";
@@ -30,6 +31,9 @@ const init = async function () {
   attractionGalleryView.addHandlerRender(controlRenderAttractionPageGallery);
   attractionReservationInfoView.addHandlerRender(
     controlRenderAttractionPageResInfo
+  );
+  attractionReservationInfoView.addHandlerSubmitForm(
+    controlSubmitReservationForm
   );
   attractionBodyView.addHandlerRender(controlRenderAttractionBody);
   attractionReservationInfoView.addHandlerClickTime(controlTimeRadioCheck);

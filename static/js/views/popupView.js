@@ -3,9 +3,9 @@ import View from "./view.js";
 class PopupView extends View {
   parentElement = document.querySelector(".popup__container");
   overlayEl = document.querySelector(".popup");
-  titleEl = this.parentElement.querySelector("h3");
+  titleEl = document.querySelector(".popup__container>h3");
   formEl = null;
-  defaultHintEl = this.parentElement.querySelector(".hint");
+  defaultHintEl = document.querySelector(".popup__container>.hint");
   btnSwitchEl = document.createElement("span");
 
   showPopup() {
