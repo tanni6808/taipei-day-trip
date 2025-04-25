@@ -6,15 +6,18 @@ import {
   controlRenderForm,
   controlSwitchPopupForm,
   controlSubmitPopupForm,
-  controlRenderAttractionPageDetail,
   loadAttractionPageDetail,
   controlSliderChangeTo,
   controlSliderPrevNext,
   controlSliderResize,
+  controlRenderAttractionPageGallery,
+  controlRenderAttractionPageResInfo,
+  controlTimeRadioCheck,
 } from "../controller.js";
 import navView from "../views/navView.js";
 import popupView from "../views/popupView.js";
 import attractionGalleryView from "../views/attractionGalleryView.js";
+import attractionReservationInfoView from "../views/attractionReservationInfoView.js";
 
 const init = async function () {
   await loadUserState();
@@ -22,7 +25,11 @@ const init = async function () {
   navView.addHandlerRender(controlRenderNav);
   navView.addHandlerClickNavLiEl(controlNavAction);
   popupView.addHandlerClickClose(controlClosePopup);
-  attractionGalleryView.addHandlerRender(controlRenderAttractionPageDetail);
+  attractionGalleryView.addHandlerRender(controlRenderAttractionPageGallery);
+  attractionReservationInfoView.addHandlerRender(
+    controlRenderAttractionPageResInfo
+  );
+  attractionReservationInfoView.addHandlerClickTime(controlTimeRadioCheck);
   attractionGalleryView.addHandlerClickBtnArrow(controlSliderPrevNext);
   attractionGalleryView.addHandlerClickNavDot(controlSliderChangeTo);
   window.addEventListener("resize", controlSliderResize);

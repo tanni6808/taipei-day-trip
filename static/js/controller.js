@@ -5,6 +5,7 @@ import mrtBarView from "./views/mrtBarView.js";
 import indexAttractionView from "./views/indexAttractionView.js";
 import popupView from "./views/popupView.js";
 import attractionGalleryView from "./views/attractionGalleryView.js";
+import attractionReservationInfoView from "./views/attractionReservationInfoView.js";
 
 export const loadUserState = async function () {
   try {
@@ -108,8 +109,12 @@ export const loadAttractionPageDetail = async function () {
   model.state.attractionPageDetail = data.data;
 };
 
-export const controlRenderAttractionPageDetail = function () {
+export const controlRenderAttractionPageGallery = function () {
   attractionGalleryView.render(model.state.attractionPageDetail);
+};
+
+export const controlRenderAttractionPageResInfo = function () {
+  attractionReservationInfoView.render(model.state.attractionPageDetail);
 };
 
 export const controlSliderPrevNext = function (direction) {
@@ -132,4 +137,9 @@ export const controlSliderResize = function () {
   attractionGalleryView.sliderResizeWithWidth(
     model.state.attractionPageSliderIndex
   );
+};
+
+export const controlTimeRadioCheck = function (id) {
+  attractionReservationInfoView.checkTime(id);
+  attractionReservationInfoView.changePrice(id);
 };
