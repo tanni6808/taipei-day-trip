@@ -13,11 +13,13 @@ import {
   controlRenderAttractionPageGallery,
   controlRenderAttractionPageResInfo,
   controlTimeRadioCheck,
+  controlRenderAttractionBody,
 } from "../controller.js";
 import navView from "../views/navView.js";
 import popupView from "../views/popupView.js";
 import attractionGalleryView from "../views/attractionGalleryView.js";
 import attractionReservationInfoView from "../views/attractionReservationInfoView.js";
+import attractionBodyView from "../views/attractionBodyView.js";
 
 const init = async function () {
   await loadUserState();
@@ -29,6 +31,7 @@ const init = async function () {
   attractionReservationInfoView.addHandlerRender(
     controlRenderAttractionPageResInfo
   );
+  attractionBodyView.addHandlerRender(controlRenderAttractionBody);
   attractionReservationInfoView.addHandlerClickTime(controlTimeRadioCheck);
   attractionGalleryView.addHandlerClickBtnArrow(controlSliderPrevNext);
   attractionGalleryView.addHandlerClickNavDot(controlSliderChangeTo);

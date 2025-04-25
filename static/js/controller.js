@@ -6,6 +6,7 @@ import indexAttractionView from "./views/indexAttractionView.js";
 import popupView from "./views/popupView.js";
 import attractionGalleryView from "./views/attractionGalleryView.js";
 import attractionReservationInfoView from "./views/attractionReservationInfoView.js";
+import attractionBodyView from "./views/attractionBodyView.js";
 
 export const loadUserState = async function () {
   try {
@@ -115,6 +116,10 @@ export const controlRenderAttractionPageGallery = function () {
 
 export const controlRenderAttractionPageResInfo = function () {
   attractionReservationInfoView.render(model.state.attractionPageDetail);
+};
+
+export const controlRenderAttractionBody = function () {
+  attractionBodyView.render(model.state.attractionPageDetail);
 };
 
 export const controlSliderPrevNext = function (direction) {
