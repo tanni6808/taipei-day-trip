@@ -8,6 +8,9 @@ import {
   controlSubmitPopupForm,
   controlRenderAttractionPageDetail,
   loadAttractionPageDetail,
+  controlSliderChangeTo,
+  controlSliderPrevNext,
+  controlSliderResize,
 } from "../controller.js";
 import navView from "../views/navView.js";
 import popupView from "../views/popupView.js";
@@ -20,6 +23,9 @@ const init = async function () {
   navView.addHandlerClickNavLiEl(controlNavAction);
   popupView.addHandlerClickClose(controlClosePopup);
   attractionGalleryView.addHandlerRender(controlRenderAttractionPageDetail);
+  attractionGalleryView.addHandlerClickBtnArrow(controlSliderPrevNext);
+  attractionGalleryView.addHandlerClickNavDot(controlSliderChangeTo);
+  window.addEventListener("resize", controlSliderResize);
   if (!model.state.signIn) {
     popupView.addHandlerRenderForm(controlRenderForm);
     popupView.addHandlerClickBtnSwitch(controlSwitchPopupForm);

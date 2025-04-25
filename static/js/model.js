@@ -7,6 +7,7 @@ export const state = {
     keyword: "",
   },
   attractionPageDetail: {},
+  attractionPageSliderIndex: 0,
 };
 
 // GET

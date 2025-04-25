@@ -41,7 +41,41 @@ class AttractionGalleryView extends View {
 
   addHandlerClickBtnArrow(handler) {
     this.parentElement.addEventListener("click", (e) => {
-      handler(e.target);
+      if (e.target.classList.contains("arrow")) {
+        const direction = e.target.classList.contains("arrow-left")
+          ? "prev"
+          : "next";
+        handler(direction);
+      }
+    });
+  }
+
+  addHandlerClickNavDot(handler) {
+    this.parentElement.addEventListener("click", (e) => {
+      if (e.target.classList.contains("dot")) {
+        const dotIndex = Array.prototype.indexOf.call(
+          this.parentElement.querySelectorAll(".dot"),
+          e.target
+        );
+        handler(dotIndex);
+      }
+    });
+  }
+
+  sliderScrollTo(index) {
+    const sliderNavDotElList = this.parentElement.querySelectorAll(".dot");
+    const sliderEl = this.parentElement.querySelector(".attraction__slider");
+    const sliderImgElList = sliderEl.querySelectorAll("img");
+    sliderNavDotElList.forEach((dot) => dot.classList.remove("active"));
+    sliderNavDotElList[index].classList.add("active");
+    sliderEl.scrollTo({ left: sliderImgElList[0].clientWidth * index });
+  }
+
+  sliderResizeWithWidth(index) {
+    const sliderEl = this.parentElement.querySelector(".attraction__slider");
+    sliderEl.scrollTo({
+      left: sliderEl.clientWidth * index,
+      behavior: "instant",
     });
   }
 }

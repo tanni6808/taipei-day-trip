@@ -112,4 +112,24 @@ export const controlRenderAttractionPageDetail = function () {
   attractionGalleryView.render(model.state.attractionPageDetail);
 };
 
-export const controlSliderChange = function (index) {};
+export const controlSliderPrevNext = function (direction) {
+  const totalSlideNum = document.querySelectorAll(
+    ".attraction__slider>img"
+  ).length;
+  const delta = direction === "prev" ? -1 : 1;
+  model.state.attractionPageSliderIndex =
+    (model.state.attractionPageSliderIndex + delta + totalSlideNum) %
+    totalSlideNum;
+  attractionGalleryView.sliderScrollTo(model.state.attractionPageSliderIndex);
+};
+
+export const controlSliderChangeTo = function (index) {
+  model.state.attractionPageSliderIndex = index;
+  attractionGalleryView.sliderScrollTo(model.state.attractionPageSliderIndex);
+};
+
+export const controlSliderResize = function () {
+  attractionGalleryView.sliderResizeWithWidth(
+    model.state.attractionPageSliderIndex
+  );
+};
