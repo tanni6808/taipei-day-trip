@@ -623,14 +623,22 @@ main {
   gap: 10px;
 }
 .booking__user-contact-info > form > .form {
+  display: flex;
+  align-items: center;
   font-weight: bold;
   color: #666666;
+}
+.booking__user-contact-info > form > .form > label {
+  flex-shrink: 0;
 }
 .booking__payment > form > .form-group {
   display: flex;
   align-items: center;
   font-weight: bold;
   color: #666666;
+}
+.booking__payment > form > .form-group > label {
+  flex-shrink: 0;
 }
 .booking__user-contact-info > form > .form > input {
   font-size: 16px;
@@ -674,6 +682,7 @@ main {
   font-weight: bold;
   height: 38px;
   width: 200px;
+  flex-shrink: 0;
   border-radius: 5px;
   border: 1px solid #e8e8e8;
   padding: 10px;
@@ -688,16 +697,21 @@ main {
   border: 1px solid #d15858 !important;
 }
 .has-success > .control-label {
-  color: #448899 !important;
+  color: #666666 !important;
 }
 .has-success > .form-control {
-  border: 1px solid #448899 !important;
+  border: 1px solid #e8e8e8 !important;
 }
 
 span.input-check {
   color: #d15858;
   font-size: 14px;
   margin-left: 5px;
+}
+@media screen and (max-width: 400px) {
+  span.input-check {
+    font-size: 10px;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -100,7 +100,7 @@ var fields = {
     placeholder: "MM / YY",
   },
   ccv: {
-    element: "#card-ccv",
+    element: "#ccv",
     placeholder: "後三碼",
   },
 };
@@ -129,17 +129,17 @@ TPDirect.card.setup({
     },
     // style valid state
     ".valid": {
-      color: "green",
+      color: "#448899",
     },
     // style invalid state
     ".invalid": {
-      color: "red",
+      color: "#d15858",
     },
     // Media queries
     // Note that these apply to the iframe, not the root window.
     "@media screen and (max-width: 400px)": {
       input: {
-        color: "orange",
+        // color: "orange",
       },
     },
   },
@@ -151,16 +151,16 @@ TPDirect.card.setup({
   },
 });
 TPDirect.card.onUpdate(function (update) {
-  const submitButton = document.getElementById("btn-confirm");
-  update.canGetPrime === true;
-  // --> you can call TPDirect.card.getPrime()
-  if (update.canGetPrime) {
-    // Enable submit Button to get prime.
-    submitButton.removeAttribute("disabled");
-  } else {
-    // Disable submit Button to get prime.
-    submitButton.setAttribute("disabled", true);
-  }
+  // const submitButton = document.getElementById("btn-confirm");
+  // update.canGetPrime === true;
+  // // --> you can call TPDirect.card.getPrime()
+  // if (update.canGetPrime) {
+  //   // Enable submit Button to get prime.
+  //   submitButton.removeAttribute("disabled");
+  // } else {
+  //   // Disable submit Button to get prime.
+  //   submitButton.setAttribute("disabled", true);
+  // }
 
   // // cardTypes = ['mastercard', 'visa', 'jcb', 'amex', 'unknown']
   // if (update.cardType === "visa") {

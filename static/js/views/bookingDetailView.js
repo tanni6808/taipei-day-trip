@@ -22,7 +22,6 @@ class BookingDetailView extends View {
     const bookingAttractionEl = document.createElement("div");
     bookingAttractionEl.classList.add("booking__attraction");
 
-    console.log(this.data);
     const bAImageEl = document.createElement("img");
     bAImageEl.classList.add("booking__attraction-image");
     bAImageEl.src = this.data.bookingData.attraction.image;

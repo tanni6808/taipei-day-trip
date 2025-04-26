@@ -9,6 +9,8 @@ import attractionReservationInfoView from "./views/attractionReservationInfoView
 import attractionBodyView from "./views/attractionBodyView.js";
 import bookingDetailView from "./views/bookingDetailView.js";
 import bookingContactView from "./views/bookingContactView.js";
+import bookingPaymentView from "./views/bookingPaymentView.js";
+import bookingConfirmView from "./views/bookingConfirmView.js";
 
 export const loadUserState = async function () {
   try {
@@ -117,13 +119,6 @@ export const controlSubmitReservationForm = async function (formEl) {
 };
 
 // BOOKING
-// export const controlMemberPageAccess = function () {
-//   if (!model.state.signIn) {
-//     alert("請先登入!");
-//     window.location.href = "/";
-//   } else return;
-// };
-
 export const controlRenderBooking = async function () {
   const bookingData = await model.getBooking();
   const data = {
@@ -132,11 +127,33 @@ export const controlRenderBooking = async function () {
   };
   bookingDetailView.render(data);
   bookingContactView.render(data, true);
+  bookingPaymentView.render(data, true);
+  bookingConfirmView.render(data, true);
 };
 
 export const controlContactInput = function (inputField) {
-  console.log(inputField);
-  bookingContactView.showInputCheckResult(inputField);
+  const contactFormValid = bookingContactView.showInputCheckResult(inputField);
+  if (inputField.id === "contact-name") {
+    model.state.contactNameValid = contactFormValid;
+  } else if (inputField.id === "contact-email") {
+    model.state.contactEmailValid = contactFormValid;
+  } else {
+    model.state.contactPhoneValid = contactFormValid;
+  }
+};
+
+export const controlBtnConfirm = function () {
+  const tappayValid = TPDirect.card.getTappayFieldsStatus().canGetPrime;
+  if (
+    model.state.contactNameValid &&
+    model.state.contactEmailValid &&
+    model.state.contactPhoneValid &&
+    tappayValid
+  ) {
+    bookingConfirmView.enableBtnConfirm();
+  } else {
+    bookingConfirmView.disableBtnConfirm();
+  }
 };
 
 // COMMON

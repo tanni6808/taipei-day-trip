@@ -32,6 +32,7 @@ class BookingContactView extends View {
       "text",
       "phone-number"
     );
+    fContactPhone.lastChild.setAttribute("pattern", `^09\\d{8}$`);
     contactFormEl.append(fContactName, fContactEmail, fContactPhone);
     const cautionEl = this.createElWithClasses("div", ["caution"]);
     cautionEl.innerText =
@@ -48,28 +49,24 @@ class BookingContactView extends View {
     inputField.previousElementSibling.style.color = "#D15858";
     inputField.style.border = "1px solid #D15858";
     if (inputField.value === "") {
-      checkResultEl.innerText = "請輸入內容!";
+      checkResultEl.innerText = "請輸入內容";
       inputField.after(checkResultEl);
-      return;
+      return false;
     }
-    if (inputField.id === "phone-number") {
-      if (
-        inputField.value.length !== 10 ||
-        !inputField.value.startsWith("09")
-      ) {
-        checkResultEl.innerText = "請輸入正確的手機號碼!";
-        inputField.after(checkResultEl);
-        return;
-      }
+    if (inputField.id === "phone-number" && !inputField.validity.valid) {
+      checkResultEl.innerText = "請輸入正確的手機號碼";
+      inputField.after(checkResultEl);
+      return false;
     }
     if (inputField.id === "contact-email" && !inputField.validity.valid) {
-      checkResultEl.innerText = "請輸入正確的信箱地址!";
+      checkResultEl.innerText = "請輸入正確的信箱地址";
       inputField.after(checkResultEl);
-      return;
+      return false;
     }
 
     inputField.previousElementSibling.style.color = "#666666";
     inputField.style.border = "1px solid #e8e8e8";
+    return true;
   }
   clearInputCheckResult(inputField) {
     if (inputField.nextElementSibling === null) return;

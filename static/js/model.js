@@ -8,6 +8,9 @@ export const state = {
   },
   attractionPageDetail: {},
   attractionPageSliderIndex: 0,
+  contactNameValid: true,
+  contactEmailValid: true,
+  contactPhoneValid: false,
 };
 
 // GET
