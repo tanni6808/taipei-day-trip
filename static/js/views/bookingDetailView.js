@@ -1,11 +1,12 @@
 import View from "./view.js";
 
-class BookingView extends View {
+class BookingDetailView extends View {
   parentElement = document.querySelector(".container");
 
   generateHtmlStructureList() {
-    const bookingAttractionSectionEl = document.createElement("section");
-    bookingAttractionSectionEl.classList.add("booking");
+    const bookingAttractionSectionEl = this.createElWithClasses("section", [
+      "booking",
+    ]);
     const bookingAttractionSectionTitle = document.createElement("h4");
     bookingAttractionSectionTitle.innerText = `您好，${this.data.userData.name}，待預定的行程如下：`;
     if (this.data.bookingData === null) {
@@ -84,4 +85,4 @@ class BookingView extends View {
   }
 }
 
-export default new BookingView();
+export default new BookingDetailView();

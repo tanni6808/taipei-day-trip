@@ -682,16 +682,22 @@ main {
   border: 2px solid black;
 }
 .has-error > .control-label {
-  color: red !important;
+  color: #d15858 !important;
 }
 .has-error > .form-control {
-  border: 1px solid red !important;
+  border: 1px solid #d15858 !important;
 }
 .has-success > .control-label {
-  color: green !important;
+  color: #448899 !important;
 }
 .has-success > .form-control {
-  border: 1px solid green !important;
+  border: 1px solid #448899 !important;
+}
+
+span.input-check {
+  color: #d15858;
+  font-size: 14px;
+  margin-left: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */

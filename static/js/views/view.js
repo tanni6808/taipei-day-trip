@@ -19,4 +19,14 @@ export default class View {
   addHandlerRender(handler) {
     handler();
   }
+  createElWithClasses(tag, classes) {
+    const el = document.createElement(tag);
+    el.classList.add(...classes);
+    return el;
+  }
+  setAttributes(el, attributes) {
+    for (let key in attributes) {
+      el.setAttribute(key, attributes[key]);
+    }
+  }
 }

@@ -123,17 +123,6 @@ class AttractionReservationInfoView extends View {
 
     return [attractionTitleEl, attractionSubTitleEl, attractionResEl];
   }
-
-  createElWithClasses(tag, classes) {
-    const el = document.createElement(tag);
-    el.classList.add(...classes);
-    return el;
-  }
-  setAttributes(el, attributes) {
-    for (let key in attributes) {
-      el.setAttribute(key, attributes[key]);
-    }
-  }
 }
 
 export default new AttractionReservationInfoView();

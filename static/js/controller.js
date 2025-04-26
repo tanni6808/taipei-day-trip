@@ -7,7 +7,8 @@ import popupView from "./views/popupView.js";
 import attractionGalleryView from "./views/attractionGalleryView.js";
 import attractionReservationInfoView from "./views/attractionReservationInfoView.js";
 import attractionBodyView from "./views/attractionBodyView.js";
-import bookingView from "./views/bookingView.js";
+import bookingDetailView from "./views/bookingDetailView.js";
+import bookingContactView from "./views/bookingContactView.js";
 
 export const loadUserState = async function () {
   try {
@@ -125,10 +126,17 @@ export const controlSubmitReservationForm = async function (formEl) {
 
 export const controlRenderBooking = async function () {
   const bookingData = await model.getBooking();
-  bookingView.render({
+  const data = {
     bookingData: bookingData,
     userData: model.state.account,
-  });
+  };
+  bookingDetailView.render(data);
+  bookingContactView.render(data, true);
+};
+
+export const controlContactInput = function (inputField) {
+  console.log(inputField);
+  bookingContactView.showInputCheckResult(inputField);
 };
 
 // COMMON
