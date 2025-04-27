@@ -11,6 +11,7 @@ import bookingDetailView from "./views/bookingDetailView.js";
 import bookingContactView from "./views/bookingContactView.js";
 import bookingPaymentView from "./views/bookingPaymentView.js";
 import bookingConfirmView from "./views/bookingConfirmView.js";
+import { tappaySetting } from "./service/tappay.js";
 
 export const loadUserState = async function () {
   try {
@@ -121,14 +122,27 @@ export const controlSubmitReservationForm = async function (formEl) {
 // BOOKING
 export const controlRenderBooking = async function () {
   const bookingData = await model.getBooking();
+  model.state.bookingData = bookingData;
   const data = {
-    bookingData: bookingData,
+    bookingData: model.state.bookingData,
     userData: model.state.account,
   };
   bookingDetailView.render(data);
+  if (bookingData === null) return;
   bookingContactView.render(data, true);
   bookingPaymentView.render(data, true);
   bookingConfirmView.render(data, true);
+  tappaySetting();
+};
+
+export const controlDeleteBooking = async function () {
+  if (!confirm("確定刪除？")) return;
+  try {
+    const result = await model.sendDeleteBooking();
+    if (result.ok) window.location.href = "/booking";
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const controlContactInput = function (inputField) {
@@ -154,6 +168,18 @@ export const controlBtnConfirm = function () {
   } else {
     bookingConfirmView.disableBtnConfirm();
   }
+};
+
+export const controlSubmitPayment = async function () {
+  TPDirect.card.getPrime((result) => {
+    console.log(result);
+    if (result.status !== 0) alert("錯誤：" + result.msg + "請聯繫客服人員。");
+    model.sendOrder(result.card.prime).then((orderResult) => {
+      if (orderResult.error)
+        alert(`無法完成訂單。${orderResult.message}，請稍後再試`);
+      else window.location.href = `/thankyou?number=${orderResult.number}`;
+    });
+  });
 };
 
 // COMMON

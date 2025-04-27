@@ -370,7 +370,6 @@ async def get_order(orderNumber: str, request: Request):
 		mycursor=mydb.cursor(dictionary=True)
 		mycursor.execute("SELECT orders.order_number, orders.price, orders.attraction_id, attractions.name, attractions.address, attractions.images, orders.book_date, orders.morning, orders.contact_name, orders.contact_email, orders.contact_phone, orders.paid FROM orders JOIN attractions ON orders.attraction_id=attractions.id WHERE order_number=%s", (orderNumber, ))
 		result=mycursor.fetchone()
-		print(result)
 		data={"number":result['order_number'], "price": result['price'], "trip": {"attraction": {"id":result['attraction_id'], 'name':result['name'], 'address': result['address'], 'image': result['images'].split(' ')[0]}, "date": result['book_date'], "time": 'morning' if result['morning']==1 else 'afternoon'}, "contact": {"name":result['contact_name'], 'email': result['contact_email'], 'phone': result['contact_phone']}, 'status': result['paid']}
 		mycursor.close()
 		mydb.close()

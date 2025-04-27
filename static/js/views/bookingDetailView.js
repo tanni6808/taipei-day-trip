@@ -3,6 +3,12 @@ import View from "./view.js";
 class BookingDetailView extends View {
   parentElement = document.querySelector(".container");
 
+  addHnadlerClickBtnDelete(handler) {
+    this.parentElement.addEventListener("click", (e) => {
+      if (e.target.id === "btn-delete") handler();
+    });
+  }
+
   generateHtmlStructureList() {
     const bookingAttractionSectionEl = this.createElWithClasses("section", [
       "booking",

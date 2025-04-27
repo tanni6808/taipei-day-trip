@@ -3,6 +3,15 @@ import View from "./view.js";
 class BookingPaymentView extends View {
   parentElement = document.querySelector(".container");
 
+  addHandlerSubmitPayment(handler) {
+    this.parentElement.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (e.target.id === "tappay") {
+        handler();
+      }
+    });
+  }
+
   generateHtmlStructureList() {
     const tappayFormSectionEl = this.createElWithClasses("section", [
       "booking",

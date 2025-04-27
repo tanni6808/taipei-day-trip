@@ -1,13 +1,14 @@
 // STATUS
 export const state = {
   signIn: false,
-  account: {},
+  account: null,
   attractionSearch: {
     nextPage: 0,
     keyword: "",
   },
-  attractionPageDetail: {},
+  attractionPageDetail: null,
   attractionPageSliderIndex: 0,
+  bookingData: null,
   contactNameValid: true,
   contactEmailValid: true,
   contactPhoneValid: false,
@@ -122,7 +123,7 @@ export const sendAccountSignIn = async function (formEl) {
   }
 };
 
-// Make Booking
+// Booking
 export const sendAddBooking = async function (formEl) {
   try {
     const token = localStorage.getItem("token");
@@ -145,6 +146,57 @@ export const sendAddBooking = async function (formEl) {
     const result = response.json();
     if (result.error) throw new Error(result.message);
     return result;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const sendDeleteBooking = async function () {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: "Bearer " + token } : {};
+    const response = await fetch("/api/booking", {
+      method: "DELETE",
+      headers,
+    });
+    const result = await response.json();
+    if (result.error) throw new Error(result.message);
+    return result;
+  } catch (err) {
+    throw err;
+  }
+};
+
+// Order
+export const sendOrder = async function (prime) {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch("/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        prime: prime,
+        order: {
+          price: state.bookingData.price,
+          trip: {
+            attraction: state.bookingData.attraction,
+            date: state.bookingData.date,
+            time: state.bookingData.time,
+          },
+          contact: {
+            name: document.getElementById("contact-name").value,
+            email: document.getElementById("contact-email").value,
+            phone: document.getElementById("phone-number").value,
+          },
+        },
+      }),
+    });
+    const data = await response.json();
+    if (data.error) throw new Error(data.message);
+    return data.data;
   } catch (err) {
     throw err;
   }
