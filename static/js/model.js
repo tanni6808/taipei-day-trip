@@ -66,7 +66,7 @@ export const getAttrationDetail = async function (attractionId) {
   return data;
 };
 
-// BOOKING
+// Booking
 export const getBooking = async function () {
   const token = localStorage.getItem("token");
   const headers = token ? { Authorization: "Bearer " + token } : {};
@@ -75,6 +75,23 @@ export const getBooking = async function () {
   });
   const data = await response.json();
   return data.data;
+};
+
+// Order
+export const getOrder = async function (orderNumber) {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`/api/order/${orderNumber}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    const { data } = await response.json();
+    if (data.error) throw new Error(data.message);
+    return data;
+  } catch (err) {
+    throw err;
+  }
 };
 
 // SEND

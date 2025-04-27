@@ -32,15 +32,13 @@ const init = async function () {
   indexAttractionView.addHandlerTouchFooter(controlRenderIndexAttraction);
   searchFormView.addHandlerSearch(controlRenderSearchResult);
   popupView.addHandlerClickClose(controlClosePopup);
-  if (!model.state.signIn) {
-    popupView.addHandlerRenderForm(controlRenderForm);
-    popupView.addHandlerClickBtnSwitch(controlSwitchPopupForm);
-    popupView.addHandlerSubmitForm(controlSubmitPopupForm);
-  }
+  popupView.addHandlerRenderForm(controlRenderForm);
+  popupView.addHandlerClickBtnSwitch(controlSwitchPopupForm);
+  popupView.addHandlerSubmitForm(controlSubmitPopupForm);
 };
 
 await init();
 
-// DEV
-import * as model from "../model.js";
-window.model = model;
+// // DEV
+// import * as model from "../model.js";
+// window.model = model;

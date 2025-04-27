@@ -12,6 +12,7 @@ import bookingContactView from "./views/bookingContactView.js";
 import bookingPaymentView from "./views/bookingPaymentView.js";
 import bookingConfirmView from "./views/bookingConfirmView.js";
 import { tappaySetting } from "./service/tappay.js";
+import thankyouView from "./views/thankyouView.js";
 
 export const loadUserState = async function () {
   try {
@@ -182,6 +183,14 @@ export const controlSubmitPayment = async function () {
   });
 };
 
+// THANKYOU
+export const controlRenderThankyouPage = async function () {
+  const searchPartsThankyou = window.location.search.split("=");
+  const orderNumber = searchPartsThankyou[searchPartsThankyou.length - 1];
+  const data = await model.getOrder(orderNumber);
+  thankyouView.render(data);
+};
+
 // COMMON
 export const controlRenderNav = function () {
   if (!model.state.signIn) navView.renderNavForGuest();
@@ -203,11 +212,13 @@ export const controlNavAction = function (clickBtnId) {
 };
 
 export const controlRenderForm = function () {
+  if (model.state.signIn) return;
   popupView.generateFormEl("signup");
   popupView.renderFormEl();
 };
 
 export const controlSwitchPopupForm = function () {
+  if (model.state.signIn) return;
   popupView.removeFormEl();
   if (popupView.formEl.id === "signup") popupView.generateFormEl("signin");
   else popupView.generateFormEl("signup");
@@ -215,6 +226,7 @@ export const controlSwitchPopupForm = function () {
 };
 
 export const controlSubmitPopupForm = async function (formId) {
+  if (model.state.signIn) return;
   try {
     if (formId === "signup") {
       const response = await model.sendAccountSignUp(popupView.formEl);
@@ -229,5 +241,6 @@ export const controlSubmitPopupForm = async function (formId) {
 };
 
 export const controlClosePopup = function () {
+  if (model.state.signIn) return;
   popupView.hidePopup();
 };

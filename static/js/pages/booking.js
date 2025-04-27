@@ -32,6 +32,6 @@ const init = async function () {
 
 await init();
 
-// DEV
-import * as model from "../model.js";
-window.model = model;
+// // DEV
+// import * as model from "../model.js";
+// window.model = model;
