@@ -62,6 +62,14 @@ class AttractionReservationInfoView extends View {
       id: "date",
       required: "",
     });
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const minDate = `${tomorrow.getFullYear()}-${String(
+      tomorrow.getMonth() + 1
+    ).padStart(2, "0")}-${String(tomorrow.getDate()).padStart(2, "0")}`;
+    formDateInput.min = minDate;
+
     resFormDate.append(formDateLabel, formDateInput);
 
     const resFormTime = this.createElWithClasses("div", ["form"]);
