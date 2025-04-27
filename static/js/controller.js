@@ -173,7 +173,6 @@ export const controlBtnConfirm = function () {
 
 export const controlSubmitPayment = async function () {
   TPDirect.card.getPrime((result) => {
-    console.log(result);
     if (result.status !== 0) alert("錯誤：" + result.msg + "請聯繫客服人員。");
     model.sendOrder(result.card.prime).then((orderResult) => {
       if (orderResult.error)

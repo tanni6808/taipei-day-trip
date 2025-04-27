@@ -8,12 +8,24 @@ import mysql.connector.pooling
 from collections import Counter
 import jwt, requests, json
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+db=os.getenv("DB")
+db_user=os.getenv("DB_USER")
+db_password=os.getenv("DB_PASSWORD")
+db_host=os.getenv("DB_HOST")
+secret_key=os.getenv("JWT_SECRET_KEY")
+tappay_partner_key=os.getenv("TAPPAY_PARTNER_KEY")
+tappay_merchant_id=os.getenv("TAPPAY_MERCHANT_ID")
+
 
 dbconfig = {
-	'user': 'root',
-	'password': '123456',
-	'host': 'localhost',
-	'database': 'taipei_day_trip'
+	'user': db_user,
+	'password': db_password,
+	'host': db_host,
+	'database': db
 }
 
 mydbpool=mysql.connector.pooling.MySQLConnectionPool(
@@ -130,7 +142,7 @@ async def get_user(request: Request):
 	else:
 		try:
 			token=auth_header.split('Bearer ')[1]
-			decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+			decode = jwt.decode(token, secret_key, algorithms=['HS256'])
 			decode.pop('exp', None)
 			return {"data": decode}
 		except:
@@ -147,7 +159,7 @@ async def put_signin(data: SignInData):
 		mydb.close()
 		if myresult==None or myresult["password"]!=data.password:
 			return {"error": True, "message": "帳號或密碼錯誤"}
-		encode=jwt.encode({"id": myresult["id"], "name": myresult["name"], "email": myresult["email"], "exp": datetime.now()+timedelta(days=7)}, "secret-key-tdt", algorithm="HS256")
+		encode=jwt.encode({"id": myresult["id"], "name": myresult["name"], "email": myresult["email"], "exp": datetime.now()+timedelta(days=7)}, secret_key, algorithm="HS256")
 		return {"token": encode}
 	except:
 		return {"error": "內部錯誤，無法登入"}
@@ -226,7 +238,7 @@ async def get_booking(request: Request):
 		return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法取得訂單資料"})
 	else:
 		token=auth_header.split('Bearer ')[1]
-		decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+		decode = jwt.decode(token, secret_key, algorithms=['HS256'])
 		mydb=mydbpool.get_connection()
 		mycursor=mydb.cursor(dictionary=True)
 		mycursor.execute('SELECT attractions.id AS attraction_id, attractions.name, attractions.address, attractions.images, booking.book_date, booking.morning FROM booking JOIN attractions ON booking.attraction_id=attractions.id WHERE user_id = %s;', (decode["id"], ))
@@ -248,7 +260,7 @@ async def post_booking(data: BookingData, request: Request):
 	else:
 		try: 
 			token=auth_header.split('Bearer ')[1]
-			decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+			decode = jwt.decode(token, secret_key, algorithms=['HS256'])
 			mydb=mydbpool.get_connection()
 			mycursor=mydb.cursor()
 			try: 
@@ -280,7 +292,7 @@ async def delete_booking(request: Request):
 	else:
 		try:
 			token=auth_header.split('Bearer ')[1]
-			decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+			decode = jwt.decode(token, secret_key, algorithms=['HS256'])
 		except:
 			return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法刪除訂單資料"})
 		mydb=mydbpool.get_connection()
@@ -302,7 +314,7 @@ async def post_orders(data: OrderData, request: Request):
 		else:
 			try: 
 				token=auth_header.split('Bearer ')[1]
-				decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+				decode = jwt.decode(token, secret_key, algorithms=['HS256'])
 			except:
 				return JSONResponse(status_code=403, content={"error": True, "message": "未登入，無法進行訂購"})
 			try: 
@@ -316,12 +328,12 @@ async def post_orders(data: OrderData, request: Request):
 				mydb.commit()
 				mycursor.close()
 				mydb.close()
-				partner_key = 'partner_jA6jWYh2Ewn3v1g0y4dlAhQquwOIZO0nULriaW1x5wXVDwqrrkqBuLLS'
+				partner_key = tappay_partner_key
 				tappay_header = {"Content-Type": "application/json", "x-api-key": partner_key}
 				tappay_data = {
 					"prime": data.prime,
 					"partner_key": partner_key,
-					"merchant_id": "tanniY521_CTBC",
+					"merchant_id": tappay_merchant_id,
 					"details":"TapPay Test",
 					"amount": data.order.price,
 					"cardholder": {
@@ -363,7 +375,7 @@ async def get_order(orderNumber: str, request: Request):
 	else:
 		try:
 			token=auth_header.split('Bearer ')[1]
-			decode = jwt.decode(token, "secret-key-tdt", algorithms=['HS256'])
+			decode = jwt.decode(token, secret_key, algorithms=['HS256'])
 		except:
 			return JSONResponse(status_code=403, content={"error": True, "message": "未登入"})
 		mydb=mydbpool.get_connection()

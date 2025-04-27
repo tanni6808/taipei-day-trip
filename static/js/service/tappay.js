@@ -1,10 +1,8 @@
+import { TAPPAY_APP_ID, TAPPAY_APP_KEY } from "../config.js";
+
 export const tappaySetting = function () {
   // TapPay Setting
-  TPDirect.setupSDK(
-    159786,
-    "app_0MVUSxxzks2dT9POjaxbqhJQy6gSExAnrDZGFEWnZ1dQPVF1zJllje4MOuIn",
-    "sandbox"
-  );
+  TPDirect.setupSDK(Number(TAPPAY_APP_ID), TAPPAY_APP_KEY, "sandbox");
   var fields = {
     number: {
       // css selector
