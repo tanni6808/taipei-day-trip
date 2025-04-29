@@ -145,3 +145,6 @@ static/node_modules/
 
 # nohup
 nohup.out
+
+# config.js
+config.js

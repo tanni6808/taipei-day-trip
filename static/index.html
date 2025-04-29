@@ -11,15 +11,14 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/src/css/style.css" />
-    <script defer src="/script.js"></script>
+    <script type="module" src="/js/pages/index.js"></script>
   </head>
   <body>
     <nav class="nav">
       <div class="nav__container">
         <h2 class="nav__title"><a href="/">台北一日遊</a></h2>
         <ul class="nav__list">
-          <li id="btn-booking">預定行程</li>
-          <li id="btn-signup-in">登入/註冊</li>
+          <!-- <li id="btn-booking">預定行程</li> -->
         </ul>
       </div>
     </nav>
@@ -30,7 +29,7 @@
           <div class="hero__slogan--sub">
             探索每個角落，體驗程式的深度旅遊行程
           </div>
-          <form action="" class="search">
+          <form action="" id="search">
             <input
               type="text"
               name=""
@@ -52,7 +51,7 @@
           <div class="arrow arrow-right arrow-right--border"></div>
         </div>
         <section class="attractions">
-          <a href="./attraction.html" class="attraction-card">
+          <!-- <a href="./attraction.html" class="attraction-card">
             <div class="attraction-card__image">
               <div class="attraction-card__name">景點</div>
             </div>
@@ -60,7 +59,7 @@
               <div>捷運站</div>
               <div>景點類別</div>
             </div>
-          </a>
+          </a> -->
         </section>
       </div>
     </main>
@@ -91,9 +90,7 @@
             <input type="text" name="" id="" placeholder="輸入密碼" />
             <button type="submit">註冊新帳戶</button>
           </form> -->
-          <div class="hint bold">
-            還沒有帳戶？<span id="btn-switch-signup-in">點此註冊</span>
-          </div>
+          <div class="hint bold"></div>
         </div>
       </div>
     </div>
