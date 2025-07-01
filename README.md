@@ -75,7 +75,7 @@
 
 - **Model**： 保存狀態、負責與後端互動的函式
 
-- **View** 以 view.js 作為 parent class 來 extend 不同 UI 區塊的 child class，在 child class 中撰寫該區塊專屬的 UI 邏輯
+- **View**：以 view.js 作為 parent class 來 extend 不同 UI 區塊的 child class，在 child class 中撰寫該區塊專屬的 UI 邏輯
 
 - **Controller**：
 
