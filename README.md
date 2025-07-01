@@ -73,13 +73,16 @@
 
 ![Detail - Frontend MVC](./assets/detail_frontend.png)
 
-- Model: 保存狀態、負責與後端互動的函式
+- **Model**： 保存狀態、負責與後端互動的函式
 
-- View: 以 view.js 作為 parent class 來 extend 不同 UI 區塊的 child class，在 child class 中撰寫該區塊專屬的 UI 邏輯
+- **View** 以 view.js 作為 parent class 來 extend 不同 UI 區塊的 child class，在 child class 中撰寫該區塊專屬的 UI 邏輯
 
-- Controller: 從 model 中拿取資料 (以 load 為開頭的函式)、操控 view 的變化(以 control 為開頭的函式)
+- **Controller**：
 
-- 每個頁面獨立的 js 檔案: 各自從 controller 中載入需要的 controller 函式
+  - 以 load 開頭的函式：從 model 中拿取資料
+  - 以 control 開頭的函式：操控 view 的變化
+
+- 每個頁面獨立的 js 檔案：各自從 controller 中載入需要的 controller 函式
 
 # 聯絡我
 
