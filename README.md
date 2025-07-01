@@ -24,15 +24,19 @@
 # 主要功能展示
 
 1. 登入/註冊會員
+
    <img alt="Feature 1-1 - Sign In" src='./assets/feature_1-1.png' width="344px"/> <img alt="Feature 1-2 - Sign Up" src='./assets/feature_1-2.png' width="344px"/>
 
 2. 透過關鍵字或點擊捷運站名搜尋景點
+
    ![Feature 2 - Search Attractions](./assets/feature_2.gif)
 
 3. 查看景點詳細資訊並預約導覽
+
    <img alt="Feature 3 - Attraction Details" src='./assets/feature_3.png' width="688px"/>
 
 4. 使用信用卡付款，完成預約
+
    ![Feature 4 - Payment](./assets/feature_4.gif)
 
 # 技術堆疊
@@ -61,6 +65,7 @@
 - TapPay
 
 技術堆疊架構圖
+
 ![Tech Stack](./assets/tech-stack.png)
 
 # 功能及技術細節
