@@ -57,6 +57,8 @@ class PopupView extends View {
       this.formEl = formEl;
       return;
     }
+    inputEmailEl.value = "test1@mail.com";
+    inputPaswordEl.value = "123456";
     this.titleEl.innerText = "登入會員帳號";
     this.btnSwitchEl.innerText = "點此註冊";
     this.defaultHintEl.innerHTML = "";
