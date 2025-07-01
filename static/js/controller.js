@@ -212,7 +212,7 @@ export const controlNavAction = function (clickBtnId) {
 
 export const controlRenderForm = function () {
   if (model.state.signIn) return;
-  popupView.generateFormEl("signup");
+  popupView.generateFormEl("signin");
   popupView.renderFormEl();
 };
 
