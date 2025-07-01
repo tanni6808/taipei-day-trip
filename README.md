@@ -1,6 +1,6 @@
 # [台北一日遊](http://57.182.192.24:8000/)
 
-一個包含完整消費流程的旅遊電商網站。使用者可以在網站上瀏覽、預約台北觀光導覽行程，並使用信用卡付款。
+「[台北一日遊](http://57.182.192.24:8000/)」是一個包含完整消費流程的旅遊電商網站練習專案。使用者可以註冊帳號，在網站上瀏覽、預約台北觀光導覽行程，並使用信用卡付款。
 
 ![Taipei Day Trip Index](/assets/taipei-day-trip_index.png)
 
@@ -16,13 +16,52 @@
 
 # 目錄
 
--[主要功能展示](#主要功能展示) -[技術堆疊](#技術堆疊) -[功能及技術細節](#功能及技術細節) -[聯絡我](#聯絡我)
+- [主要功能展示](#主要功能展示)
+- [技術堆疊](#技術堆疊)
+- [功能及技術細節](#功能及技術細節)
+- [聯絡我](#聯絡我)
 
 # 主要功能展示
 
+1. 登入/註冊會員
+   <img alt="Feature 1-1 - Sign In" src='./assets/feature_1-1.png' width="344px"/> <img alt="Feature 1-2 - Sign Up" src='./assets/feature_1-2.png' width="344px"/>
+
+2. 透過關鍵字或點擊捷運站名搜尋景點
+   ![Feature 2 - Search Attractions](./assets/feature_2.gif)
+
+3. 查看景點詳細資訊並預約導覽
+   <img alt="Feature 3 - Attraction Details" src='./assets/feature_3.png' width="688px"/>
+
+4. 使用信用卡付款，完成預約
+   ![Feature 4 - Payment](./assets/feature_4.gif)
+
 # 技術堆疊
 
+前端
+
+- HTML
+- Sass(SCSS)
+- JavaScript
+
+後端
+
+- Python
+- FastAPI
+
+資料庫
+
+- MySQL
+
+部屬
+
+- AWS EC2
+
+第三方金流服務
+
+- TapPay
+
 技術堆疊架構圖
+![Tech Stack](./assets/tech-stack.png)
 
 # 功能及技術細節
 
